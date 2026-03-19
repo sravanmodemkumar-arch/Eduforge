@@ -1,0 +1,27 @@
+<!-- Alert items -->
+{% for alert in alerts %}
+<div class="flex items-start px-5 py-3 hover:bg-gray-50 transition-colors">
+    {% if alert.severity == "CRITICAL" %}
+    <span class="flex-shrink-0 mt-0.5 w-2 h-2 rounded-full bg-red-500"></span>
+    {% elif alert.severity == "WARNING" %}
+    <span class="flex-shrink-0 mt-0.5 w-2 h-2 rounded-full bg-amber-500"></span>
+    {% else %}
+    <span class="flex-shrink-0 mt-0.5 w-2 h-2 rounded-full bg-blue-500"></span>
+    {% endif %}
+    <div class="ml-3 flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+            <p class="text-sm text-gray-800">{{ alert.message }}</p>
+            {% if alert.severity == "CRITICAL" %}
+            <span class="ml-2 flex-shrink-0 inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-medium text-red-700 ring-1 ring-inset ring-red-600/20">CRITICAL</span>
+            {% elif alert.severity == "WARNING" %}
+            <span class="ml-2 flex-shrink-0 inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20">WARNING</span>
+            {% else %}
+            <span class="ml-2 flex-shrink-0 inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">INFO</span>
+            {% endif %}
+        </div>
+        <p class="mt-0.5 text-xs text-gray-500">{{ alert.category }} &middot; {{ alert.time }}</p>
+    </div>
+</div>
+{% empty %}
+<div class="px-5 py-8 text-center text-sm text-gray-500">No active alerts</div>
+{% endfor %}

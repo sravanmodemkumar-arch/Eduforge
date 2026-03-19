@@ -1,0 +1,297 @@
+{% comment %}Super Admin sidebar navigation — all 54 pages organized in collapsible sections.{% endcomment %}
+{% load portal_tags %}
+
+<!-- 1. Command Center -->
+<a href="/sa/" class="flex items-center px-3 py-2 text-sm font-medium rounded-md {% if request.path == '/sa/' %}bg-slate-700 text-white{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
+    <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+    <template x-if="!sidebarCollapsed"><span>Command Center</span></template>
+</a>
+
+<!-- 2. Institutions -->
+<div>
+    <button @click="toggleSection('inst')" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+        <span class="flex items-center">
+            <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" /></svg>
+            <template x-if="!sidebarCollapsed"><span>Institutions</span></template>
+        </span>
+        <template x-if="!sidebarCollapsed">
+            <svg :class="openSections.inst ? 'rotate-90' : ''" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </template>
+    </button>
+    <div x-show="openSections.inst && !sidebarCollapsed" x-collapse class="ml-8 space-y-0.5 mt-0.5">
+        <a href="/sa/institutions/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">All Institutions</a>
+        <a href="/sa/institutions/groups/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Groups</a>
+        <a href="/sa/institutions/create/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Create Institution</a>
+        <a href="/sa/institutions/transfer-merge/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Transfer &amp; Merge</a>
+    </div>
+</div>
+
+<!-- 3. Users -->
+<div>
+    <button @click="toggleSection('users')" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+        <span class="flex items-center">
+            <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+            <template x-if="!sidebarCollapsed"><span>Users</span></template>
+        </span>
+        <template x-if="!sidebarCollapsed">
+            <svg :class="openSections.users ? 'rotate-90' : ''" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </template>
+    </button>
+    <div x-show="openSections.users && !sidebarCollapsed" x-collapse class="ml-8 space-y-0.5 mt-0.5">
+        <a href="/sa/users/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">All Users</a>
+        <a href="/sa/users/platform-staff/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Platform Staff</a>
+        <a href="/sa/users/impersonation-log/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Impersonation Log</a>
+    </div>
+</div>
+
+<!-- 4. Domains -->
+<div>
+    <button @click="toggleSection('domains')" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+        <span class="flex items-center">
+            <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" /></svg>
+            <template x-if="!sidebarCollapsed"><span>Domains</span></template>
+        </span>
+        <template x-if="!sidebarCollapsed">
+            <svg :class="openSections.domains ? 'rotate-90' : ''" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </template>
+    </button>
+    <div x-show="openSections.domains && !sidebarCollapsed" x-collapse class="ml-8 space-y-0.5 mt-0.5">
+        <a href="/sa/domains/mock-sites/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Mock Test Sites</a>
+        <a href="/sa/domains/custom/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Custom Domains</a>
+    </div>
+</div>
+
+<!-- 5. Subscriptions -->
+<div>
+    <button @click="toggleSection('subs')" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+        <span class="flex items-center">
+            <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
+            <template x-if="!sidebarCollapsed"><span>Subscriptions</span></template>
+        </span>
+        <template x-if="!sidebarCollapsed">
+            <svg :class="openSections.subs ? 'rotate-90' : ''" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </template>
+    </button>
+    <div x-show="openSections.subs && !sidebarCollapsed" x-collapse class="ml-8 space-y-0.5 mt-0.5">
+        <a href="/sa/subscriptions/plans/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Plans</a>
+        <a href="/sa/subscriptions/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">All Subscriptions</a>
+        <a href="/sa/subscriptions/revenue/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Revenue</a>
+        <a href="/sa/subscriptions/forecast/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Forecasting</a>
+    </div>
+</div>
+
+<!-- 6. Configuration -->
+<div>
+    <button @click="toggleSection('config')" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+        <span class="flex items-center">
+            <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+            <template x-if="!sidebarCollapsed"><span>Configuration</span></template>
+        </span>
+        <template x-if="!sidebarCollapsed">
+            <svg :class="openSections.config ? 'rotate-90' : ''" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </template>
+    </button>
+    <div x-show="openSections.config && !sidebarCollapsed" x-collapse class="ml-8 space-y-0.5 mt-0.5">
+        <a href="/sa/config/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Global Settings</a>
+        <a href="/sa/config/feature-flags/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Feature Flags</a>
+        <a href="/sa/config/external-services/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">External Services</a>
+        <a href="/sa/config/templates/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Templates</a>
+        <a href="/sa/config/history/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Config History</a>
+    </div>
+</div>
+
+<!-- 7. Security -->
+<div>
+    <button @click="toggleSection('security')" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+        <span class="flex items-center">
+            <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+            <template x-if="!sidebarCollapsed"><span>Security</span></template>
+        </span>
+        <template x-if="!sidebarCollapsed">
+            <svg :class="openSections.security ? 'rotate-90' : ''" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </template>
+    </button>
+    <div x-show="openSections.security && !sidebarCollapsed" x-collapse class="ml-8 space-y-0.5 mt-0.5">
+        <a href="/sa/security/audit-log/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Audit Log</a>
+        <a href="/sa/security/login-monitor/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Login Monitor</a>
+        <a href="/sa/security/ip-blocks/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">IP Blocking</a>
+        <a href="/sa/security/sessions/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Sessions</a>
+        <a href="/sa/security/data-access/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Data Access Log</a>
+    </div>
+</div>
+
+<!-- 8. Infrastructure -->
+<div>
+    <button @click="toggleSection('infra')" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+        <span class="flex items-center">
+            <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 14.25h13.5m-13.5 0a3 3 0 01-3-3m3 3a3 3 0 100 6h13.5a3 3 0 100-6m-16.5-3a3 3 0 013-3h13.5a3 3 0 013 3m-19.5 0a4.5 4.5 0 01.9-2.7L5.737 5.1a3.375 3.375 0 012.7-1.35h7.126c1.062 0 2.062.5 2.7 1.35l2.587 3.45a4.5 4.5 0 01.9 2.7m0 0a3 3 0 01-3 3m0 3h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008zm-3 6h.008v.008h-.008v-.008zm0-6h.008v.008h-.008v-.008z" /></svg>
+            <template x-if="!sidebarCollapsed"><span>Infrastructure</span></template>
+        </span>
+        <template x-if="!sidebarCollapsed">
+            <svg :class="openSections.infra ? 'rotate-90' : ''" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </template>
+    </button>
+    <div x-show="openSections.infra && !sidebarCollapsed" x-collapse class="ml-8 space-y-0.5 mt-0.5">
+        <a href="/sa/infra/services/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Service Health</a>
+        <a href="/sa/infra/database/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Database</a>
+        <a href="/sa/infra/jobs/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Background Jobs</a>
+        <a href="/sa/infra/cache/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Cache</a>
+    </div>
+</div>
+
+<!-- 9. Content -->
+<div>
+    <button @click="toggleSection('content')" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+        <span class="flex items-center">
+            <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+            <template x-if="!sidebarCollapsed"><span>Content</span></template>
+        </span>
+        <template x-if="!sidebarCollapsed">
+            <svg :class="openSections.content ? 'rotate-90' : ''" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </template>
+    </button>
+    <div x-show="openSections.content && !sidebarCollapsed" x-collapse class="ml-8 space-y-0.5 mt-0.5">
+        <a href="/sa/content/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Overview</a>
+        <a href="/sa/content/flagged/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Flagged</a>
+        <a href="/sa/content/productivity/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Productivity</a>
+    </div>
+</div>
+
+<!-- 10. Compliance -->
+<div>
+    <button @click="toggleSection('compliance')" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+        <span class="flex items-center">
+            <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" /></svg>
+            <template x-if="!sidebarCollapsed"><span>Compliance</span></template>
+        </span>
+        <template x-if="!sidebarCollapsed">
+            <svg :class="openSections.compliance ? 'rotate-90' : ''" class="h-4 w-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+        </template>
+    </button>
+    <div x-show="openSections.compliance && !sidebarCollapsed" x-collapse class="ml-8 space-y-0.5 mt-0.5">
+        <a href="/sa/compliance/data-requests/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Data Requests</a>
+        <a href="/sa/compliance/reports/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Reports</a>
+        <a href="/sa/compliance/tenant-audit/" class="block px-3 py-1.5 text-xs text-slate-400 hover:text-white rounded">Tenant Audit</a>
+    </div>
+</div>
+
+<div class="my-3 border-t border-slate-700"></div>
+<template x-if="!sidebarCollapsed"><p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Operations</p></template>
+
+<!-- Emergency -->
+<a href="/sa/emergency/" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-red-400 hover:bg-red-900/30 hover:text-red-300">
+    <svg class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+    <template x-if="!sidebarCollapsed"><span>Emergency Controls</span></template>
+</a>
+
+<!-- Single-page links -->
+{% with links="Activity Stream,/sa/activity/,activity|Map View,/sa/map/,map|Calendar,/sa/calendar/,calendar|Trash,/sa/trash/,trash|Export Center,/sa/exports/,download|Onboarding,/sa/onboarding/,clipboard|Approvals,/sa/approvals/,check|Announcements,/sa/announcements/,megaphone|Incidents,/sa/incidents/,fire" %}
+{% for item in links|split:"|" %}
+{% with parts=item|split:"," %}
+<a href="{{ parts.1 }}" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9679;</span>
+    <template x-if="!sidebarCollapsed"><span>{{ parts.0 }}</span></template>
+</a>
+{% endwith %}
+{% endfor %}
+{% endwith %}
+
+<div class="my-3 border-t border-slate-700"></div>
+<template x-if="!sidebarCollapsed"><p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Monitoring</p></template>
+
+<a href="/sa/cost-center/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">$</span>
+    <template x-if="!sidebarCollapsed"><span>Cost Center</span></template>
+</a>
+<a href="/sa/storage/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9744;</span>
+    <template x-if="!sidebarCollapsed"><span>Storage &amp; Media</span></template>
+</a>
+<a href="/sa/mobile-app/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9743;</span>
+    <template x-if="!sidebarCollapsed"><span>Mobile App</span></template>
+</a>
+<a href="/sa/deliverability/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9993;</span>
+    <template x-if="!sidebarCollapsed"><span>Deliverability</span></template>
+</a>
+<a href="/sa/errors/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9888;</span>
+    <template x-if="!sidebarCollapsed"><span>Error Tracking</span></template>
+</a>
+<a href="/sa/maintenance/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9881;</span>
+    <template x-if="!sidebarCollapsed"><span>Maintenance</span></template>
+</a>
+<a href="/sa/backup/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9850;</span>
+    <template x-if="!sidebarCollapsed"><span>Backup &amp; DR</span></template>
+</a>
+<a href="/sa/vendor-health/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#10003;</span>
+    <template x-if="!sidebarCollapsed"><span>Vendor Health</span></template>
+</a>
+<a href="/sa/payment-gateway/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#8377;</span>
+    <template x-if="!sidebarCollapsed"><span>Payment Gateway</span></template>
+</a>
+<a href="/sa/search-indexing/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#128269;</span>
+    <template x-if="!sidebarCollapsed"><span>Search &amp; Indexing</span></template>
+</a>
+<a href="/sa/load-capacity/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9889;</span>
+    <template x-if="!sidebarCollapsed"><span>Load &amp; Capacity</span></template>
+</a>
+<a href="/sa/health-score/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9829;</span>
+    <template x-if="!sidebarCollapsed"><span>Health Score</span></template>
+</a>
+<a href="/sa/war-room/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#127942;</span>
+    <template x-if="!sidebarCollapsed"><span>Exam War Room</span></template>
+</a>
+
+<div class="my-3 border-t border-slate-700"></div>
+<template x-if="!sidebarCollapsed"><p class="px-3 mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Developer</p></template>
+
+<a href="/sa/changelog/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#128196;</span>
+    <template x-if="!sidebarCollapsed"><span>Changelog</span></template>
+</a>
+<a href="/sa/api-playground/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9654;</span>
+    <template x-if="!sidebarCollapsed"><span>API Playground</span></template>
+</a>
+<a href="/sa/db-console/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9783;</span>
+    <template x-if="!sidebarCollapsed"><span>DB Console</span></template>
+</a>
+<a href="/sa/docs/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#128218;</span>
+    <template x-if="!sidebarCollapsed"><span>Documentation</span></template>
+</a>
+<a href="/sa/certificates/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#127915;</span>
+    <template x-if="!sidebarCollapsed"><span>Certificates</span></template>
+</a>
+<a href="/sa/whitelabel-preview/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#127912;</span>
+    <template x-if="!sidebarCollapsed"><span>White-Label Preview</span></template>
+</a>
+<a href="/sa/bulk-ops/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#9776;</span>
+    <template x-if="!sidebarCollapsed"><span>Bulk Operations</span></template>
+</a>
+<a href="/sa/alerts-config/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#128276;</span>
+    <template x-if="!sidebarCollapsed"><span>Alerts Config</span></template>
+</a>
+<a href="/sa/forensics/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#128270;</span>
+    <template x-if="!sidebarCollapsed"><span>Audit Forensics</span></template>
+</a>
+<a href="/sa/archival/" class="flex items-center px-3 py-1.5 text-sm text-slate-300 rounded-md hover:bg-slate-800 hover:text-white">
+    <span class="h-5 w-5 mr-3 flex-shrink-0 flex items-center justify-center text-xs">&#128451;</span>
+    <template x-if="!sidebarCollapsed"><span>Archival Policy</span></template>
+</a>
