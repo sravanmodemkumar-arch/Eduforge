@@ -1,5 +1,5 @@
 """Portal service URL configuration."""
-from django.urls import path
+from django.urls import include, path
 
 from portal.views.dashboard import dashboard_view
 from portal.views.students import (
@@ -41,4 +41,6 @@ urlpatterns = [
     path("timetable/", dashboard_view, name="timetable"),
     # Health
     path("health/", health_check, name="health"),
+    # Super Admin
+    path("sa/", include("portal.sa_urls")),
 ]

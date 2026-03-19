@@ -1,0 +1,36 @@
+<!-- Live counter cards — auto-refreshed via HTMX every 30s -->
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Active Users</p>
+        <p class="mt-1 text-xl font-bold text-gray-900">{{ active_users|default:"47,832" }}</p>
+        <div class="mt-1 flex items-center"><span class="w-2 h-2 rounded-full bg-green-400 animate-pulse mr-1.5"></span><span class="text-xs text-green-600">Live</span></div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Active Exams</p>
+        <p class="mt-1 text-xl font-bold text-gray-900">{{ active_exams|default:"3,214" }}</p>
+        <div class="mt-1 flex items-center"><span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse mr-1.5"></span><span class="text-xs text-blue-600">Running</span></div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Institutions</p>
+        <p class="mt-1 text-xl font-bold text-gray-900">{{ institutions_online|default:"743" }}<span class="text-sm font-normal text-gray-400">/{{ institutions_total|default:"765" }}</span></p>
+        <div class="mt-1"><span class="text-xs text-gray-500">Online now</span></div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">API Health</p>
+        <p class="mt-1 text-xl font-bold text-green-600">{{ api_health|default:"99.97" }}%</p>
+        <div class="mt-1"><span class="text-xs text-gray-500">Last 24h</span></div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Open Tickets</p>
+        <p class="mt-1 text-xl font-bold text-amber-600">{{ unresolved_tickets|default:"127" }}</p>
+        <div class="mt-1"><span class="text-xs text-red-500">3 SLA breached</span></div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Revenue Today</p>
+        <p class="mt-1 text-xl font-bold text-gray-900">&#8377;4.82L</p>
+        <div class="mt-1 flex items-center text-xs text-green-600">
+            <svg class="h-3 w-3 mr-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+            +8.3%
+        </div>
+    </div>
+</div>

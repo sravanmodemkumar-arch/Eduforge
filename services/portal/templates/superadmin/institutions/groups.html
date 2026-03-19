@@ -1,0 +1,37 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Institution Groups - Super Admin{% endblock %}
+{% block page_title %}Institution Groups{% endblock %}
+
+{% block content %}
+<div x-data="{ showCreateModal: false }">
+    <div class="flex items-center justify-between mb-4">
+        <p class="text-sm text-gray-500">{{ groups|length }} groups managing multiple institutions</p>
+        <button @click="showCreateModal = true" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+            <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            Create Group
+        </button>
+    </div>
+
+    <div id="groups-table">
+        {% include "superadmin/institutions/partials/groups_table.html" %}
+    </div>
+
+    <!-- Create Group Modal -->
+    <div x-show="showCreateModal" x-transition class="fixed inset-0 z-50 flex items-center justify-center" x-cloak>
+        <div class="fixed inset-0 bg-gray-900/50" @click="showCreateModal = false"></div>
+        <div class="relative bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 p-6">
+            <h3 class="text-lg font-semibold text-gray-900">Create Institution Group</h3>
+            <div class="mt-4 space-y-4">
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Group Name *</label><input type="text" class="w-full rounded-md border-gray-300 text-sm" placeholder="e.g., SV University Group"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Group Type *</label><select class="w-full rounded-md border-gray-300 text-sm"><option>University</option><option>College Chain</option><option>Coaching Chain</option><option>Government</option></select></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Owner Name</label><input type="text" class="w-full rounded-md border-gray-300 text-sm"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Contact Email</label><input type="email" class="w-full rounded-md border-gray-300 text-sm"></div>
+            </div>
+            <div class="mt-5 flex justify-end gap-3">
+                <button @click="showCreateModal = false" class="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Cancel</button>
+                <button class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Create Group</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

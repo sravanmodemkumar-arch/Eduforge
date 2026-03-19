@@ -1,0 +1,37 @@
+{% comment %}
+Super Admin Table Filters Component
+Renders a horizontal filter bar with search and dropdowns.
+Filters trigger HTMX requests on change.
+Usage: {% include "components/sa_table_filters.html" with target="#table-body" url="/sa/api/institutions/" %}
+{% endcomment %}
+<div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+    <form hx-get="{{ url|default:'' }}"
+          hx-target="{{ target|default:'#table-body' }}"
+          hx-swap="innerHTML"
+          hx-trigger="change from:select, keyup changed delay:300ms from:input[type=search]"
+          class="flex flex-wrap items-center gap-3">
+        <!-- Search -->
+        <div class="relative flex-1 min-w-[200px]">
+            <svg class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input type="search"
+                   name="q"
+                   placeholder="{{ search_placeholder|default:'Search...' }}"
+                   class="w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-4 text-sm text-gray-700 placeholder-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+        </div>
+
+        {% block filter_fields %}
+        <!-- Override this block with specific filter fields -->
+        {% endblock %}
+
+        <!-- Reset -->
+        <button type="reset"
+                class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+            <svg class="mr-1.5 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
+            </svg>
+            Reset
+        </button>
+    </form>
+</div>

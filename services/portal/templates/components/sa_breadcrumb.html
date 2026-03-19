@@ -1,0 +1,20 @@
+{% comment %}Breadcrumb navigation — expects `breadcrumbs` list of {label, url} in context.{% endcomment %}
+<nav class="flex" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-2 text-sm text-gray-500">
+        <li>
+            <a href="/sa/" class="hover:text-gray-700">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+            </a>
+        </li>
+        {% for bc in breadcrumbs %}
+        <li class="flex items-center">
+            <svg class="h-4 w-4 text-gray-300 mx-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" /></svg>
+            {% if bc.url %}
+                <a href="{{ bc.url }}" class="hover:text-gray-700">{{ bc.label }}</a>
+            {% else %}
+                <span class="font-medium text-gray-900">{{ bc.label }}</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ol>
+</nav>
