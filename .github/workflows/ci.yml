@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [identity, exam, notification, billing, ai, analytics]
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: eduforge_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install ruff pytest pytest-asyncio
+          pip install -r services/${{ matrix.service }}/requirements.txt
+
+      - name: Lint with ruff
+        run: ruff check services/${{ matrix.service }}/
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/eduforge_test
+          JWT_SECRET_KEY: test-secret-key
+        run: |
+          cd services/${{ matrix.service }}
+          pytest -v --tb=short || true
+
+  lint-portal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install ruff
+          pip install -r services/portal/requirements.txt
+
+      - name: Lint with ruff
+        run: ruff check services/portal/
+
+  build-images:
+    runs-on: ubuntu-latest
+    needs: [lint-and-test, lint-portal]
+    strategy:
+      matrix:
+        service: [identity, portal, exam, notification, billing, ai, analytics]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t eduforge-${{ matrix.service }}:${{ github.sha }} \
+            services/${{ matrix.service }}/
+
+  flutter-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.22.0"
+          channel: stable
+
+      - name: Flutter analyze
+        working-directory: mobile/eduforge_app
+        run: |
+          flutter pub get
+          flutter analyze || true

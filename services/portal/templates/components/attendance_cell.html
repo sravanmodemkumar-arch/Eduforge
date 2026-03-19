@@ -1,0 +1,32 @@
+{% comment %}
+Attendance status toggle buttons for a single student.
+Context: student, status, target_date
+Each button POSTs to /attendance/mark/ and swaps just this cell.
+{% endcomment %}
+
+<div id="att-cell-{{ student.id }}" class="inline-flex rounded-md shadow-sm">
+    <button hx-post="/attendance/mark/"
+            hx-vals='{"student_id": "{{ student.id }}", "date": "{{ target_date|date:"Y-m-d" }}", "session_type": "FULL_DAY", "status": "PRESENT"}'
+            hx-target="#att-cell-{{ student.id }}"
+            hx-swap="outerHTML"
+            class="relative inline-flex items-center rounded-l-md border px-3 py-1.5 text-xs font-medium
+                   {% if status == 'PRESENT' %}border-green-500 bg-green-500 text-white{% else %}border-gray-300 bg-white text-gray-700 hover:bg-green-50{% endif %}">
+        P
+    </button>
+    <button hx-post="/attendance/mark/"
+            hx-vals='{"student_id": "{{ student.id }}", "date": "{{ target_date|date:"Y-m-d" }}", "session_type": "FULL_DAY", "status": "ABSENT"}'
+            hx-target="#att-cell-{{ student.id }}"
+            hx-swap="outerHTML"
+            class="relative -ml-px inline-flex items-center border px-3 py-1.5 text-xs font-medium
+                   {% if status == 'ABSENT' %}border-red-500 bg-red-500 text-white{% else %}border-gray-300 bg-white text-gray-700 hover:bg-red-50{% endif %}">
+        A
+    </button>
+    <button hx-post="/attendance/mark/"
+            hx-vals='{"student_id": "{{ student.id }}", "date": "{{ target_date|date:"Y-m-d" }}", "session_type": "FULL_DAY", "status": "LATE"}'
+            hx-target="#att-cell-{{ student.id }}"
+            hx-swap="outerHTML"
+            class="relative -ml-px inline-flex items-center rounded-r-md border px-3 py-1.5 text-xs font-medium
+                   {% if status == 'LATE' %}border-yellow-500 bg-yellow-500 text-white{% else %}border-gray-300 bg-white text-gray-700 hover:bg-yellow-50{% endif %}">
+        L
+    </button>
+</div>

@@ -1,0 +1,104 @@
+{% extends "layouts/base.html" %}
+{% load portal_tags %}
+
+{% block title %}Attendance - EduForge Portal{% endblock %}
+{% block page_title %}Attendance{% endblock %}
+
+{% block content %}
+<div class="space-y-4">
+    <!-- Filters -->
+    <div class="rounded-lg bg-white p-4 shadow">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+            <!-- Date -->
+            <div>
+                <label for="att-date" class="block text-xs font-medium text-gray-500">Date</label>
+                <input type="date"
+                       id="att-date"
+                       name="date"
+                       value="{{ target_date|date:'Y-m-d' }}"
+                       class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                       hx-get="/attendance/"
+                       hx-trigger="change"
+                       hx-target="#attendance-grid"
+                       hx-include="[name='class_name'], [name='section']">
+            </div>
+
+            <!-- Class -->
+            <div>
+                <label for="att-class" class="block text-xs font-medium text-gray-500">Class</label>
+                <select id="att-class"
+                        name="class_name"
+                        class="mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        hx-get="/attendance/"
+                        hx-trigger="change"
+                        hx-target="#attendance-grid"
+                        hx-include="[name='date'], [name='section']">
+                    <option value="">All Classes</option>
+                    {% for cls in classes %}
+                    <option value="{{ cls }}" {% if cls == class_name %}selected{% endif %}>Class {{ cls }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Section -->
+            <div>
+                <label for="att-section" class="block text-xs font-medium text-gray-500">Section</label>
+                <input type="text"
+                       id="att-section"
+                       name="section"
+                       value="{{ section }}"
+                       placeholder="e.g. A"
+                       class="mt-1 w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                       hx-get="/attendance/"
+                       hx-trigger="change"
+                       hx-target="#attendance-grid"
+                       hx-include="[name='date'], [name='class_name']">
+            </div>
+
+            <!-- Report link -->
+            <div class="sm:ml-auto">
+                <a href="/attendance/report/"
+                   class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50">
+                    View Report
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Grid -->
+    <div id="attendance-grid" class="overflow-hidden rounded-lg bg-white shadow">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Roll No</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Student</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Class</th>
+                    <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 bg-white">
+                {% for row in grid %}
+                <tr id="att-row-{{ row.student.id }}">
+                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{{ row.student.roll_number }}</td>
+                    <td class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">
+                        {{ row.student.metadata.name|default:row.student.roll_number }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                        {{ row.student.class_name }}-{{ row.student.section }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-center">
+                        {% include "components/attendance_cell.html" with student=row.student status=row.status target_date=target_date %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="px-6 py-12 text-center text-sm text-gray-500">
+                        No students found. Select a class to view the attendance grid.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

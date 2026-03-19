@@ -1,0 +1,239 @@
+version: "3.9"
+
+services:
+  # ---------------------------------------------------------------------------
+  # Infrastructure
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: eduforge-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-eduforge}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eduforge_secret}
+      POSTGRES_DB: ${POSTGRES_DB:-eduforge}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/01-init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-eduforge} -d ${POSTGRES_DB:-eduforge}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  localstack:
+    image: localstack/localstack:3
+    container_name: eduforge-localstack
+    restart: unless-stopped
+    ports:
+      - "4566:4566"
+    environment:
+      SERVICES: sqs,s3
+      DEFAULT_REGION: ap-south-1
+      EAGER_SERVICE_LOADING: 1
+    volumes:
+      - localstack_data:/var/lib/localstack
+
+  # ---------------------------------------------------------------------------
+  # Application Services
+  # ---------------------------------------------------------------------------
+  identity:
+    build:
+      context: ./services/identity
+      dockerfile: Dockerfile
+    container_name: eduforge-identity
+    restart: unless-stopped
+    ports:
+      - "8001:8000"
+    environment:
+      SERVICE_NAME: identity
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-eduforge}:${POSTGRES_PASSWORD:-eduforge_secret}@postgres:5432/${POSTGRES_DB:-eduforge}
+      DATABASE_SCHEMA: identity
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: ${JWT_ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      JWT_REFRESH_TOKEN_EXPIRE_DAYS: ${JWT_REFRESH_TOKEN_EXPIRE_DAYS:-7}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8002,http://localhost:3000}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  portal:
+    build:
+      context: ./services/portal
+      dockerfile: Dockerfile
+    container_name: eduforge-portal
+    restart: unless-stopped
+    ports:
+      - "8002:8000"
+    environment:
+      SERVICE_NAME: portal
+      DATABASE_URL: postgresql://${POSTGRES_USER:-eduforge}:${POSTGRES_PASSWORD:-eduforge_secret}@postgres:5432/${POSTGRES_DB:-eduforge}
+      DATABASE_SCHEMA: portal
+      DJANGO_SETTINGS_MODULE: portal.settings
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-change-me-in-production}
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
+      IDENTITY_SERVICE_URL: http://identity:8000
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
+      CLOUDFLARE_R2_ENDPOINT: ${CLOUDFLARE_R2_ENDPOINT:-http://localstack:4566}
+      CLOUDFLARE_R2_ACCESS_KEY: ${CLOUDFLARE_R2_ACCESS_KEY:-test}
+      CLOUDFLARE_R2_SECRET_KEY: ${CLOUDFLARE_R2_SECRET_KEY:-test}
+      CLOUDFLARE_R2_BUCKET: ${CLOUDFLARE_R2_BUCKET:-eduforge-assets}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  exam:
+    build:
+      context: ./services/exam
+      dockerfile: Dockerfile
+    container_name: eduforge-exam
+    restart: unless-stopped
+    ports:
+      - "8003:8000"
+    environment:
+      SERVICE_NAME: exam
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-eduforge}:${POSTGRES_PASSWORD:-eduforge_secret}@postgres:5432/${POSTGRES_DB:-eduforge}
+      DATABASE_SCHEMA: exam
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
+      IDENTITY_SERVICE_URL: http://identity:8000
+      CLOUDFLARE_R2_ENDPOINT: ${CLOUDFLARE_R2_ENDPOINT:-http://localstack:4566}
+      CLOUDFLARE_R2_ACCESS_KEY: ${CLOUDFLARE_R2_ACCESS_KEY:-test}
+      CLOUDFLARE_R2_SECRET_KEY: ${CLOUDFLARE_R2_SECRET_KEY:-test}
+      CLOUDFLARE_R2_BUCKET: ${CLOUDFLARE_R2_BUCKET:-eduforge-assets}
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-south-1}
+      SQS_QUEUE_URL: ${SQS_EXAM_QUEUE_URL:-http://localstack:4566/000000000000/exam-events}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_started
+
+  notification:
+    build:
+      context: ./services/notification
+      dockerfile: Dockerfile
+    container_name: eduforge-notification
+    restart: unless-stopped
+    ports:
+      - "8004:8000"
+    environment:
+      SERVICE_NAME: notification
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-eduforge}:${POSTGRES_PASSWORD:-eduforge_secret}@postgres:5432/${POSTGRES_DB:-eduforge}
+      DATABASE_SCHEMA: notification
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
+      IDENTITY_SERVICE_URL: http://identity:8000
+      WHATSAPP_API_URL: ${WHATSAPP_API_URL:-}
+      WHATSAPP_API_TOKEN: ${WHATSAPP_API_TOKEN:-}
+      MSG91_AUTH_KEY: ${MSG91_AUTH_KEY:-}
+      MSG91_SENDER_ID: ${MSG91_SENDER_ID:-}
+      MSG91_TEMPLATE_ID: ${MSG91_TEMPLATE_ID:-}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY:-}
+      SENDGRID_FROM_EMAIL: ${SENDGRID_FROM_EMAIL:-noreply@eduforge.io}
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-south-1}
+      SQS_QUEUE_URL: ${SQS_NOTIFICATION_QUEUE_URL:-http://localstack:4566/000000000000/notification-events}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_started
+
+  billing:
+    build:
+      context: ./services/billing
+      dockerfile: Dockerfile
+    container_name: eduforge-billing
+    restart: unless-stopped
+    ports:
+      - "8005:8000"
+    environment:
+      SERVICE_NAME: billing
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-eduforge}:${POSTGRES_PASSWORD:-eduforge_secret}@postgres:5432/${POSTGRES_DB:-eduforge}
+      DATABASE_SCHEMA: billing
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
+      IDENTITY_SERVICE_URL: http://identity:8000
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-}
+      RAZORPAY_WEBHOOK_SECRET: ${RAZORPAY_WEBHOOK_SECRET:-}
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-south-1}
+      SQS_QUEUE_URL: ${SQS_BILLING_QUEUE_URL:-http://localstack:4566/000000000000/billing-events}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_started
+
+  ai:
+    build:
+      context: ./services/ai
+      dockerfile: Dockerfile
+    container_name: eduforge-ai
+    restart: unless-stopped
+    ports:
+      - "8006:8000"
+    environment:
+      SERVICE_NAME: ai
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-eduforge}:${POSTGRES_PASSWORD:-eduforge_secret}@postgres:5432/${POSTGRES_DB:-eduforge}
+      DATABASE_SCHEMA: ai
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
+      IDENTITY_SERVICE_URL: http://identity:8000
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o}
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-south-1}
+      SQS_QUEUE_URL: ${SQS_AI_QUEUE_URL:-http://localstack:4566/000000000000/ai-events}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_started
+
+  analytics:
+    build:
+      context: ./services/analytics
+      dockerfile: Dockerfile
+    container_name: eduforge-analytics
+    restart: unless-stopped
+    ports:
+      - "8007:8000"
+    environment:
+      SERVICE_NAME: analytics
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-eduforge}:${POSTGRES_PASSWORD:-eduforge_secret}@postgres:5432/${POSTGRES_DB:-eduforge}
+      DATABASE_SCHEMA: analytics
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
+      IDENTITY_SERVICE_URL: http://identity:8000
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-test}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-test}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:-ap-south-1}
+      SQS_QUEUE_URL: ${SQS_ANALYTICS_QUEUE_URL:-http://localstack:4566/000000000000/analytics-events}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      localstack:
+        condition: service_started
+
+volumes:
+  postgres_data:
+  localstack_data:

@@ -1,0 +1,63 @@
+version: "3.9"
+
+# =============================================================================
+# Development overrides
+# Volume mounts for hot-reload and debug settings
+# =============================================================================
+
+services:
+  identity:
+    volumes:
+      - ./services/identity:/app
+    environment:
+      LOG_LEVEL: debug
+      RELOAD: "true"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  portal:
+    volumes:
+      - ./services/portal:/app
+    environment:
+      DJANGO_DEBUG: "true"
+      LOG_LEVEL: debug
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+  exam:
+    volumes:
+      - ./services/exam:/app
+    environment:
+      LOG_LEVEL: debug
+      RELOAD: "true"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  notification:
+    volumes:
+      - ./services/notification:/app
+    environment:
+      LOG_LEVEL: debug
+      RELOAD: "true"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  billing:
+    volumes:
+      - ./services/billing:/app
+    environment:
+      LOG_LEVEL: debug
+      RELOAD: "true"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  ai:
+    volumes:
+      - ./services/ai:/app
+    environment:
+      LOG_LEVEL: debug
+      RELOAD: "true"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  analytics:
+    volumes:
+      - ./services/analytics:/app
+    environment:
+      LOG_LEVEL: debug
+      RELOAD: "true"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
