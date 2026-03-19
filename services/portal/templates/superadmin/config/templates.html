@@ -1,0 +1,255 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Notification Templates - Super Admin{% endblock %}
+{% block page_title %}Notification Templates{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">Manage notification and communication templates across all channels.</p>
+        <a href="/sa/config/templates/create/" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+            <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            Create Template
+        </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex items-center space-x-3 mb-4">
+        <input type="text" placeholder="Search templates..." class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+        <select class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <option value="">All Channels</option>
+            <option>SMS</option>
+            <option>Email</option>
+            <option>WhatsApp</option>
+            <option>Push</option>
+            <option>In-App</option>
+        </select>
+        <select class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <option value="">All Triggers</option>
+            <option>Authentication</option>
+            <option>Exam</option>
+            <option>Payment</option>
+            <option>Subscription</option>
+            <option>System</option>
+        </select>
+    </div>
+
+    <!-- Templates Table -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Template Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Channel</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trigger</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Variables</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Edited</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <!-- Row 1 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-sm font-medium text-gray-900">OTP Verification</p>
+                            <p class="text-xs text-gray-500">Login/signup OTP message</p>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">SMS</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Authentication</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{otp}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{expiry}}</code>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-02-15 10:30</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/config/templates/otp-verification/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Preview</button>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Duplicate</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 2 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-sm font-medium text-gray-900">Exam Reminder</p>
+                            <p class="text-xs text-gray-500">Sent 1 hour before exam start</p>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">WhatsApp</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Exam</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{student_name}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{exam_name}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{start_time}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{exam_url}}</code>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-01 14:20</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/config/templates/exam-reminder/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Preview</button>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Duplicate</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 3 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-sm font-medium text-gray-900">Result Published</p>
+                            <p class="text-xs text-gray-500">Score and rank notification</p>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center space-x-1">
+                                <span class="inline-flex items-center rounded-full bg-cyan-50 px-2.5 py-0.5 text-xs font-medium text-cyan-700">Email</span>
+                                <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">Push</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Exam</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{student_name}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{exam_name}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{score}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{rank}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{result_url}}</code>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-02-28 09:15</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/config/templates/result-published/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Preview</button>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Duplicate</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 4 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-sm font-medium text-gray-900">Payment Successful</p>
+                            <p class="text-xs text-gray-500">Payment confirmation receipt</p>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-cyan-50 px-2.5 py-0.5 text-xs font-medium text-cyan-700">Email</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Payment</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{institution_name}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{amount}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{plan}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{invoice_url}}</code>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-01-20 16:45</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/config/templates/payment-successful/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Preview</button>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Duplicate</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 5 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-sm font-medium text-gray-900">Subscription Expiry Warning</p>
+                            <p class="text-xs text-gray-500">7 days before subscription expiry</p>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center space-x-1">
+                                <span class="inline-flex items-center rounded-full bg-cyan-50 px-2.5 py-0.5 text-xs font-medium text-cyan-700">Email</span>
+                                <span class="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700">WhatsApp</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Subscription</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{admin_name}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{plan}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{expiry_date}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{renew_url}}</code>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-05 11:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/config/templates/subscription-expiry/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Preview</button>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Duplicate</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 6 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-sm font-medium text-gray-900">Welcome Onboarding</p>
+                            <p class="text-xs text-gray-500">New institution welcome email</p>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-cyan-50 px-2.5 py-0.5 text-xs font-medium text-cyan-700">Email</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">System</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{admin_name}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{institution_name}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{login_url}}</code>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2025-12-10 08:45</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/config/templates/welcome-onboarding/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Preview</button>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Duplicate</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 7 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <p class="text-sm font-medium text-gray-900">Daily Study Nudge</p>
+                            <p class="text-xs text-gray-500">Engagement push for inactive students</p>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">Push</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">System</td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-wrap gap-1">
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{student_name}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{streak_days}}</code>
+                                <code class="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">{{suggestion}}</code>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-12 15:30</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/config/templates/daily-study-nudge/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Preview</button>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Duplicate</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

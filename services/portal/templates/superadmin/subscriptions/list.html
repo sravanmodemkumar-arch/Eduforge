@@ -1,0 +1,352 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}All Subscriptions - Super Admin{% endblock %}
+{% block page_title %}All Subscriptions{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">View and manage all institution subscriptions across the platform.</p>
+        <div class="flex items-center space-x-2">
+            <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <svg class="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+                Export CSV
+            </button>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p class="text-xs text-gray-500">Total Active</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1">723</p>
+            <p class="text-xs text-green-600 mt-1">+12 this week</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p class="text-xs text-gray-500">Expiring Soon</p>
+            <p class="text-2xl font-bold text-amber-600 mt-1">34</p>
+            <p class="text-xs text-gray-500 mt-1">Within 30 days</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p class="text-xs text-gray-500">Past Due</p>
+            <p class="text-2xl font-bold text-red-600 mt-1">8</p>
+            <p class="text-xs text-gray-500 mt-1">Payment pending</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p class="text-xs text-gray-500">Churned (This Month)</p>
+            <p class="text-2xl font-bold text-gray-600 mt-1">5</p>
+            <p class="text-xs text-gray-500 mt-1">1.2% churn rate</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="flex flex-wrap items-center gap-3">
+            <div class="flex-1 min-w-[200px]">
+                <input type="text" placeholder="Search institution..." class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                       hx-get="/sa/subscriptions/list/search/"
+                       hx-trigger="keyup changed delay:300ms"
+                       hx-target="#subscriptions-table"
+                       name="q">
+            </div>
+            <select class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">All Plans</option>
+                <option>Free Trial</option>
+                <option>Starter</option>
+                <option>Basic</option>
+                <option>Pro</option>
+                <option>Enterprise</option>
+                <option>Group</option>
+            </select>
+            <select class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">All Statuses</option>
+                <option>Active</option>
+                <option>Trial</option>
+                <option>Past Due</option>
+                <option>Cancelled</option>
+                <option>Expired</option>
+            </select>
+            <select class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">All Cycles</option>
+                <option>Monthly</option>
+                <option>Quarterly</option>
+                <option>Annual</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Subscriptions Table -->
+    <div id="subscriptions-table" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institution</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plan</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cycle</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expiry</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Auto-Renew</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <!-- Row 1 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700">VE</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Vidya Edutech</p>
+                                    <p class="text-xs text-gray-500">INST-001</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700">Pro</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">&#8377;9,999</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Monthly</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2024-06-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026-04-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Active</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="inline-flex items-center text-green-600">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/subscriptions/INST-001/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">View</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Edit</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 2 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center text-xs font-bold text-purple-700">PA</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Pariksha Academy</p>
+                                    <p class="text-xs text-gray-500">INST-042</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">Enterprise</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">&#8377;2,49,990</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Annual</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-01-15</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026-01-15</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">Past Due</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="inline-flex items-center text-green-600">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/subscriptions/INST-042/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">View</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Edit</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 3 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-xs font-bold text-green-700">TC</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">TopperClasses</p>
+                                    <p class="text-xs text-gray-500">INST-078</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Basic</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">&#8377;14,997</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Quarterly</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-10-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026-04-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Active</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="inline-flex items-center text-green-600">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/subscriptions/INST-078/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">View</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Edit</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 4 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-amber-100 flex items-center justify-center text-xs font-bold text-amber-700">SK</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Saraswati Knowledge Hub</p>
+                                    <p class="text-xs text-gray-500">INST-125</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">Free Trial</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">&#8377;0</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">14 days</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026-03-10</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-amber-600 font-medium">2026-03-24</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">Trial</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="inline-flex items-center text-gray-400">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/subscriptions/INST-125/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">View</a>
+                                <button class="text-xs text-green-600 hover:text-green-800">Convert</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 5 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-xs font-bold text-red-700">NC</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Naveen Coaching Centre</p>
+                                    <p class="text-xs text-gray-500">INST-203</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Starter</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">&#8377;1,999</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Monthly</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-08-12</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026-04-12</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Active</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="inline-flex items-center text-gray-400">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/subscriptions/INST-203/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">View</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Edit</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 6 -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-cyan-100 flex items-center justify-center text-xs font-bold text-cyan-700">DA</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Delhi Academy IAS</p>
+                                    <p class="text-xs text-gray-500">INST-310</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700">Pro</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">&#8377;9,999</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Monthly</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-03-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2026-04-01</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Active</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="inline-flex items-center text-green-600">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/subscriptions/INST-310/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">View</a>
+                                <button class="text-xs text-gray-500 hover:text-gray-700">Edit</button>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Row 7 -->
+                    <tr class="hover:bg-gray-50 bg-red-50/30">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-pink-100 flex items-center justify-center text-xs font-bold text-pink-700">RS</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">RajStudy Online</p>
+                                    <p class="text-xs text-gray-500">INST-455</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Basic</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">&#8377;4,999</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Monthly</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2025-06-20</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-medium">2026-02-20</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">Cancelled</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <span class="inline-flex items-center text-gray-400">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg>
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end space-x-2">
+                                <a href="/sa/subscriptions/INST-455/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">View</a>
+                                <button class="text-xs text-green-600 hover:text-green-800">Reactivate</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between px-6 py-3 border-t border-gray-200 bg-gray-50">
+            <p class="text-sm text-gray-500">Showing <span class="font-medium">1</span> to <span class="font-medium">7</span> of <span class="font-medium">765</span> subscriptions</p>
+            <div class="flex items-center space-x-2">
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-500 hover:bg-gray-50" disabled>Previous</button>
+                <button class="rounded-md border border-indigo-500 bg-indigo-50 px-3 py-1.5 text-sm font-medium text-indigo-600">1</button>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">2</button>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">3</button>
+                <span class="text-gray-400">...</span>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">110</button>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

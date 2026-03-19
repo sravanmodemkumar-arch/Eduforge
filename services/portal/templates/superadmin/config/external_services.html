@@ -1,0 +1,231 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}External Services - Super Admin{% endblock %}
+{% block page_title %}External Services{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">Monitor and configure third-party service integrations.</p>
+        <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                hx-post="/sa/config/external-services/health-check/"
+                hx-swap="none">
+            <svg class="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3" /></svg>
+            Run Health Check
+        </button>
+    </div>
+
+    <!-- Service Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+
+        <!-- Razorpay -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                        <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" /></svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-semibold text-gray-900">Razorpay</h3>
+                        <p class="text-xs text-gray-500">Payment Gateway</p>
+                    </div>
+                </div>
+                <span class="flex h-2.5 w-2.5 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2 text-xs text-gray-500">
+                <div class="flex justify-between"><span>Status</span><span class="font-medium text-green-600">Connected</span></div>
+                <div class="flex justify-between"><span>Last Ping</span><span>12ms</span></div>
+                <div class="flex justify-between"><span>API Calls (24h)</span><span>2,840</span></div>
+                <div class="flex justify-between"><span>Errors (24h)</span><span>3</span></div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <a href="/sa/config/external-services/razorpay/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Configure</a>
+                <button class="text-xs text-gray-500 hover:text-gray-700">Test Connection</button>
+            </div>
+        </div>
+
+        <!-- MSG91 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-lg bg-green-100 flex items-center justify-center">
+                        <svg class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-semibold text-gray-900">MSG91</h3>
+                        <p class="text-xs text-gray-500">SMS / OTP Provider</p>
+                    </div>
+                </div>
+                <span class="flex h-2.5 w-2.5 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2 text-xs text-gray-500">
+                <div class="flex justify-between"><span>Status</span><span class="font-medium text-green-600">Connected</span></div>
+                <div class="flex justify-between"><span>Last Ping</span><span>45ms</span></div>
+                <div class="flex justify-between"><span>SMS Sent (24h)</span><span>14,280</span></div>
+                <div class="flex justify-between"><span>Balance</span><span class="font-medium text-gray-900">&#8377;42,500</span></div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <a href="/sa/config/external-services/msg91/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Configure</a>
+                <button class="text-xs text-gray-500 hover:text-gray-700">Test Connection</button>
+            </div>
+        </div>
+
+        <!-- WhatsApp Business -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-lg bg-emerald-100 flex items-center justify-center">
+                        <svg class="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-semibold text-gray-900">WhatsApp</h3>
+                        <p class="text-xs text-gray-500">Business API</p>
+                    </div>
+                </div>
+                <span class="flex h-2.5 w-2.5 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2 text-xs text-gray-500">
+                <div class="flex justify-between"><span>Status</span><span class="font-medium text-green-600">Connected</span></div>
+                <div class="flex justify-between"><span>Last Ping</span><span>78ms</span></div>
+                <div class="flex justify-between"><span>Messages (24h)</span><span>8,420</span></div>
+                <div class="flex justify-between"><span>Delivery Rate</span><span>98.2%</span></div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <a href="/sa/config/external-services/whatsapp/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Configure</a>
+                <button class="text-xs text-gray-500 hover:text-gray-700">Test Connection</button>
+            </div>
+        </div>
+
+        <!-- SendGrid -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-lg bg-cyan-100 flex items-center justify-center">
+                        <svg class="h-5 w-5 text-cyan-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-semibold text-gray-900">SendGrid</h3>
+                        <p class="text-xs text-gray-500">Email Service</p>
+                    </div>
+                </div>
+                <span class="flex h-2.5 w-2.5 rounded-full bg-amber-500" title="Degraded"></span>
+            </div>
+            <div class="space-y-2 text-xs text-gray-500">
+                <div class="flex justify-between"><span>Status</span><span class="font-medium text-amber-600">Degraded</span></div>
+                <div class="flex justify-between"><span>Last Ping</span><span>320ms</span></div>
+                <div class="flex justify-between"><span>Emails (24h)</span><span>22,150</span></div>
+                <div class="flex justify-between"><span>Bounce Rate</span><span class="text-amber-600">4.8%</span></div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <a href="/sa/config/external-services/sendgrid/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Configure</a>
+                <button class="text-xs text-gray-500 hover:text-gray-700">Test Connection</button>
+            </div>
+        </div>
+
+        <!-- Firebase -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-lg bg-amber-100 flex items-center justify-center">
+                        <svg class="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-semibold text-gray-900">Firebase</h3>
+                        <p class="text-xs text-gray-500">Push Notifications</p>
+                    </div>
+                </div>
+                <span class="flex h-2.5 w-2.5 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2 text-xs text-gray-500">
+                <div class="flex justify-between"><span>Status</span><span class="font-medium text-green-600">Connected</span></div>
+                <div class="flex justify-between"><span>Last Ping</span><span>28ms</span></div>
+                <div class="flex justify-between"><span>Pushes (24h)</span><span>45,600</span></div>
+                <div class="flex justify-between"><span>Open Rate</span><span>32.1%</span></div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <a href="/sa/config/external-services/firebase/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Configure</a>
+                <button class="text-xs text-gray-500 hover:text-gray-700">Test Connection</button>
+            </div>
+        </div>
+
+        <!-- Cloudflare R2 -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-lg bg-orange-100 flex items-center justify-center">
+                        <svg class="h-5 w-5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 004.5 4.5H18a3.75 3.75 0 001.332-7.257 3 3 0 00-3.758-3.848 5.25 5.25 0 00-10.233 2.33A4.502 4.502 0 002.25 15z" /></svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-semibold text-gray-900">Cloudflare R2</h3>
+                        <p class="text-xs text-gray-500">Object Storage</p>
+                    </div>
+                </div>
+                <span class="flex h-2.5 w-2.5 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2 text-xs text-gray-500">
+                <div class="flex justify-between"><span>Status</span><span class="font-medium text-green-600">Connected</span></div>
+                <div class="flex justify-between"><span>Last Ping</span><span>15ms</span></div>
+                <div class="flex justify-between"><span>Storage Used</span><span>1.8 TB</span></div>
+                <div class="flex justify-between"><span>Requests (24h)</span><span>1,24,000</span></div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <a href="/sa/config/external-services/r2/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Configure</a>
+                <button class="text-xs text-gray-500 hover:text-gray-700">Test Connection</button>
+            </div>
+        </div>
+
+        <!-- OpenAI -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-lg bg-violet-100 flex items-center justify-center">
+                        <svg class="h-5 w-5 text-violet-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" /></svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-semibold text-gray-900">OpenAI</h3>
+                        <p class="text-xs text-gray-500">AI / LLM Provider</p>
+                    </div>
+                </div>
+                <span class="flex h-2.5 w-2.5 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2 text-xs text-gray-500">
+                <div class="flex justify-between"><span>Status</span><span class="font-medium text-green-600">Connected</span></div>
+                <div class="flex justify-between"><span>Last Ping</span><span>180ms</span></div>
+                <div class="flex justify-between"><span>Tokens (24h)</span><span>2.4M</span></div>
+                <div class="flex justify-between"><span>Cost (MTD)</span><span class="font-medium text-gray-900">$482</span></div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <a href="/sa/config/external-services/openai/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Configure</a>
+                <button class="text-xs text-gray-500 hover:text-gray-700">Test Connection</button>
+            </div>
+        </div>
+
+        <!-- Sentry -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center">
+                    <div class="h-10 w-10 rounded-lg bg-red-100 flex items-center justify-center">
+                        <svg class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 12.75c1.148 0 2.278.08 3.383.237 1.037.146 1.866.966 1.866 2.013 0 3.728-2.35 6.75-5.25 6.75S6.75 18.728 6.75 15c0-1.046.83-1.867 1.866-2.013A24.204 24.204 0 0112 12.75zm0 0c2.883 0 5.647.508 8.207 1.44a23.91 23.91 0 01-1.152 6.06M12 12.75c-2.883 0-5.647.508-8.208 1.44.125 2.104.52 4.136 1.153 6.06M12 12.75a2.25 2.25 0 002.248-2.354M12 12.75a2.25 2.25 0 01-2.248-2.354M12 8.25c.995 0 1.971-.08 2.922-.236.403-.066.74-.358.795-.762a3.778 3.778 0 00-.399-2.25M12 8.25c-.995 0-1.97-.08-2.922-.236-.402-.066-.74-.358-.795-.762a3.734 3.734 0 01.4-2.253M12 8.25a2.25 2.25 0 00-2.248 2.146M12 8.25a2.25 2.25 0 012.248 2.146M8.683 5a6.032 6.032 0 01-1.155-1.002c.07-.63.27-1.222.574-1.747m.581 2.749A3.75 3.75 0 0115.318 5m0 0c.427-.283.815-.62 1.155-.999a4.471 4.471 0 00-.575-1.752" /></svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-semibold text-gray-900">Sentry</h3>
+                        <p class="text-xs text-gray-500">Error Tracking</p>
+                    </div>
+                </div>
+                <span class="flex h-2.5 w-2.5 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2 text-xs text-gray-500">
+                <div class="flex justify-between"><span>Status</span><span class="font-medium text-green-600">Connected</span></div>
+                <div class="flex justify-between"><span>Last Ping</span><span>35ms</span></div>
+                <div class="flex justify-between"><span>Errors (24h)</span><span class="text-amber-600">142</span></div>
+                <div class="flex justify-between"><span>Unresolved</span><span class="text-red-600">28</span></div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+                <a href="/sa/config/external-services/sentry/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Configure</a>
+                <button class="text-xs text-gray-500 hover:text-gray-700">Test Connection</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

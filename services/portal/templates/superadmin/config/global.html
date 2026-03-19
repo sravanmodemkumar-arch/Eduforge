@@ -1,0 +1,291 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Global Configuration - Super Admin{% endblock %}
+{% block page_title %}Global Configuration{% endblock %}
+
+{% block content %}
+<div x-data="{ editingKey: null, editValue: '' }">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">System-wide configuration parameters. Changes take effect immediately.</p>
+        <div class="flex items-center space-x-2">
+            <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <svg class="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3" /></svg>
+                Refresh Cache
+            </button>
+            <a href="/sa/config/history/" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                <svg class="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                Change History
+            </a>
+        </div>
+    </div>
+
+    <!-- Search -->
+    <div class="mb-4">
+        <input type="text" placeholder="Search configuration keys..." class="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+    </div>
+
+    <!-- Config Table -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Key</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Modified</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+
+                    {% for config in configs %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">{{ config.key }}</code>
+                        </td>
+                        <td class="px-6 py-4">
+                            <template x-if="editingKey === '{{ config.key }}'">
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" x-model="editValue" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+                                    <button @click="editingKey = null" class="text-xs text-green-600 hover:text-green-800 font-medium"
+                                            hx-put="/sa/config/update/"
+                                            hx-vals='{"key": "{{ config.key }}", "value": editValue}'>Save</button>
+                                    <button @click="editingKey = null" class="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                                </div>
+                            </template>
+                            <template x-if="editingKey !== '{{ config.key }}'">
+                                <span class="text-sm text-gray-900">{{ config.value }}</span>
+                            </template>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">{{ config.type }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">{{ config.category }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">{{ config.modified }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button @click="editingKey = '{{ config.key }}'; editValue = '{{ config.value }}'" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
+                        </td>
+                    </tr>
+                    {% empty %}
+
+                    <!-- Hardcoded fallback rows -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">PLATFORM_NAME</code>
+                        </td>
+                        <td class="px-6 py-4">
+                            <template x-if="editingKey === 'PLATFORM_NAME'">
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" x-model="editValue" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+                                    <button @click="editingKey = null" class="text-xs text-green-600 hover:text-green-800 font-medium">Save</button>
+                                    <button @click="editingKey = null" class="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                                </div>
+                            </template>
+                            <template x-if="editingKey !== 'PLATFORM_NAME'">
+                                <span class="text-sm text-gray-900">EduForge</span>
+                            </template>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">string</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">General</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2025-11-20 14:30</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button @click="editingKey = 'PLATFORM_NAME'; editValue = 'EduForge'" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">MAX_UPLOAD_SIZE_MB</code>
+                        </td>
+                        <td class="px-6 py-4">
+                            <template x-if="editingKey === 'MAX_UPLOAD_SIZE_MB'">
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" x-model="editValue" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+                                    <button @click="editingKey = null" class="text-xs text-green-600 hover:text-green-800 font-medium">Save</button>
+                                    <button @click="editingKey = null" class="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                                </div>
+                            </template>
+                            <template x-if="editingKey !== 'MAX_UPLOAD_SIZE_MB'">
+                                <span class="text-sm text-gray-900">50</span>
+                            </template>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">integer</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700">Storage</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-01-15 09:12</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button @click="editingKey = 'MAX_UPLOAD_SIZE_MB'; editValue = '50'" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">DEFAULT_TRIAL_DAYS</code>
+                        </td>
+                        <td class="px-6 py-4">
+                            <template x-if="editingKey === 'DEFAULT_TRIAL_DAYS'">
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" x-model="editValue" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+                                    <button @click="editingKey = null" class="text-xs text-green-600 hover:text-green-800 font-medium">Save</button>
+                                    <button @click="editingKey = null" class="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                                </div>
+                            </template>
+                            <template x-if="editingKey !== 'DEFAULT_TRIAL_DAYS'">
+                                <span class="text-sm text-gray-900">14</span>
+                            </template>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">integer</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700">Subscription</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2025-06-10 11:45</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button @click="editingKey = 'DEFAULT_TRIAL_DAYS'; editValue = '14'" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">RAZORPAY_WEBHOOK_SECRET</code>
+                        </td>
+                        <td class="px-6 py-4">
+                            <template x-if="editingKey === 'RAZORPAY_WEBHOOK_SECRET'">
+                                <div class="flex items-center space-x-2">
+                                    <input type="password" x-model="editValue" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+                                    <button @click="editingKey = null" class="text-xs text-green-600 hover:text-green-800 font-medium">Save</button>
+                                    <button @click="editingKey = null" class="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                                </div>
+                            </template>
+                            <template x-if="editingKey !== 'RAZORPAY_WEBHOOK_SECRET'">
+                                <span class="text-sm text-gray-900 font-mono">&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;</span>
+                            </template>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">secret</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700">Payment</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-02-01 16:20</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button @click="editingKey = 'RAZORPAY_WEBHOOK_SECRET'; editValue = ''" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">OTP_EXPIRY_MINUTES</code>
+                        </td>
+                        <td class="px-6 py-4">
+                            <template x-if="editingKey === 'OTP_EXPIRY_MINUTES'">
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" x-model="editValue" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+                                    <button @click="editingKey = null" class="text-xs text-green-600 hover:text-green-800 font-medium">Save</button>
+                                    <button @click="editingKey = null" class="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                                </div>
+                            </template>
+                            <template x-if="editingKey !== 'OTP_EXPIRY_MINUTES'">
+                                <span class="text-sm text-gray-900">5</span>
+                            </template>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">integer</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">Auth</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2025-09-22 10:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button @click="editingKey = 'OTP_EXPIRY_MINUTES'; editValue = '5'" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">MAX_CONCURRENT_SESSIONS</code>
+                        </td>
+                        <td class="px-6 py-4">
+                            <template x-if="editingKey === 'MAX_CONCURRENT_SESSIONS'">
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" x-model="editValue" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+                                    <button @click="editingKey = null" class="text-xs text-green-600 hover:text-green-800 font-medium">Save</button>
+                                    <button @click="editingKey = null" class="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                                </div>
+                            </template>
+                            <template x-if="editingKey !== 'MAX_CONCURRENT_SESSIONS'">
+                                <span class="text-sm text-gray-900">3</span>
+                            </template>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">integer</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">Auth</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-01 08:30</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button @click="editingKey = 'MAX_CONCURRENT_SESSIONS'; editValue = '3'" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">MAINTENANCE_MODE</code>
+                        </td>
+                        <td class="px-6 py-4">
+                            <template x-if="editingKey === 'MAINTENANCE_MODE'">
+                                <div class="flex items-center space-x-2">
+                                    <select x-model="editValue" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <option value="false">false</option>
+                                        <option value="true">true</option>
+                                    </select>
+                                    <button @click="editingKey = null" class="text-xs text-green-600 hover:text-green-800 font-medium">Save</button>
+                                    <button @click="editingKey = null" class="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                                </div>
+                            </template>
+                            <template x-if="editingKey !== 'MAINTENANCE_MODE'">
+                                <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700">false</span>
+                            </template>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">boolean</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700">General</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-15 02:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button @click="editingKey = 'MAINTENANCE_MODE'; editValue = 'false'" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">CDN_BASE_URL</code>
+                        </td>
+                        <td class="px-6 py-4">
+                            <template x-if="editingKey === 'CDN_BASE_URL'">
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" x-model="editValue" class="rounded-md border border-gray-300 px-2 py-1 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+                                    <button @click="editingKey = null" class="text-xs text-green-600 hover:text-green-800 font-medium">Save</button>
+                                    <button @click="editingKey = null" class="text-xs text-gray-500 hover:text-gray-700">Cancel</button>
+                                </div>
+                            </template>
+                            <template x-if="editingKey !== 'CDN_BASE_URL'">
+                                <span class="text-sm text-gray-900">https://cdn.eduforge.io</span>
+                            </template>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">url</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700">Storage</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2025-12-01 17:45</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button @click="editingKey = 'CDN_BASE_URL'; editValue = 'https://cdn.eduforge.io'" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</button>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

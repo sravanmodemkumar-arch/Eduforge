@@ -1,0 +1,155 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Calendar - Super Admin{% endblock %}
+{% block page_title %}Calendar{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Calendar Placeholder -->
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <button class="p-1 rounded-lg hover:bg-gray-100 text-gray-500">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+                </button>
+                <h2 class="text-lg font-semibold text-gray-900">March 2026</h2>
+                <button class="p-1 rounded-lg hover:bg-gray-100 text-gray-500">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+                </button>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button class="px-3 py-1.5 text-xs font-medium bg-indigo-600 text-white rounded-lg">Month</button>
+                <button class="px-3 py-1.5 text-xs font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">Week</button>
+            </div>
+        </div>
+        <div class="p-4">
+            <!-- Calendar Grid -->
+            <div class="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden">
+                <div class="bg-gray-50 py-2 text-center text-xs font-medium text-gray-500">Sun</div>
+                <div class="bg-gray-50 py-2 text-center text-xs font-medium text-gray-500">Mon</div>
+                <div class="bg-gray-50 py-2 text-center text-xs font-medium text-gray-500">Tue</div>
+                <div class="bg-gray-50 py-2 text-center text-xs font-medium text-gray-500">Wed</div>
+                <div class="bg-gray-50 py-2 text-center text-xs font-medium text-gray-500">Thu</div>
+                <div class="bg-gray-50 py-2 text-center text-xs font-medium text-gray-500">Fri</div>
+                <div class="bg-gray-50 py-2 text-center text-xs font-medium text-gray-500">Sat</div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span class="text-gray-400">1</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>2</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>3</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>4</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>5</span><div class="mt-1 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] truncate">SSL Renewal</div></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>6</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>7</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>8</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>9</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>10</span><div class="mt-1 px-1 py-0.5 bg-red-100 text-red-700 rounded text-[10px] truncate">Maintenance</div></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>11</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>12</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>13</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>14</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>15</span><div class="mt-1 px-1 py-0.5 bg-green-100 text-green-700 rounded text-[10px] truncate">New Inst Launch</div></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>16</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>17</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>18</span></div>
+                <div class="bg-indigo-50 p-2 min-h-[80px] text-xs text-gray-900 ring-2 ring-indigo-500 rounded"><span class="font-bold text-indigo-600">19</span><div class="mt-1 px-1 py-0.5 bg-amber-100 text-amber-700 rounded text-[10px] truncate">JEE Mains Exam</div></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>20</span><div class="mt-1 px-1 py-0.5 bg-amber-100 text-amber-700 rounded text-[10px] truncate">JEE Mains Exam</div></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>21</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>22</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>23</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>24</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>25</span><div class="mt-1 px-1 py-0.5 bg-purple-100 text-purple-700 rounded text-[10px] truncate">Deploy v2.5</div></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>26</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>27</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>28</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>29</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>30</span></div>
+                <div class="bg-white p-2 min-h-[80px] text-xs text-gray-900"><span>31</span><div class="mt-1 px-1 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] truncate">Monthly Billing</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Upcoming Events</h2>
+        </div>
+        <div class="divide-y divide-gray-100">
+            <div class="px-6 py-4 hover:bg-gray-50">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-amber-100 flex flex-col items-center justify-center">
+                        <span class="text-xs font-medium text-amber-600">Mar</span>
+                        <span class="text-lg font-bold text-amber-700">19</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">JEE Mains 2026 - Day 1</p>
+                        <p class="text-xs text-gray-500">9:00 AM - 12:00 PM &middot; All India</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-100 text-red-800 mt-1">High Alert</span>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 hover:bg-gray-50">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-amber-100 flex flex-col items-center justify-center">
+                        <span class="text-xs font-medium text-amber-600">Mar</span>
+                        <span class="text-lg font-bold text-amber-700">20</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">JEE Mains 2026 - Day 2</p>
+                        <p class="text-xs text-gray-500">9:00 AM - 12:00 PM &middot; All India</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-100 text-red-800 mt-1">High Alert</span>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 hover:bg-gray-50">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-purple-100 flex flex-col items-center justify-center">
+                        <span class="text-xs font-medium text-purple-600">Mar</span>
+                        <span class="text-lg font-bold text-purple-700">25</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">Platform v2.5 Deployment</p>
+                        <p class="text-xs text-gray-500">2:00 AM - 4:00 AM IST</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-purple-100 text-purple-800 mt-1">Deployment</span>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 hover:bg-gray-50">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-blue-100 flex flex-col items-center justify-center">
+                        <span class="text-xs font-medium text-blue-600">Mar</span>
+                        <span class="text-lg font-bold text-blue-700">31</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">Monthly Billing Cycle</p>
+                        <p class="text-xs text-gray-500">Auto-generated invoices for all institutions</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-blue-100 text-blue-800 mt-1">Billing</span>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 hover:bg-gray-50">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-green-100 flex flex-col items-center justify-center">
+                        <span class="text-xs font-medium text-green-600">Apr</span>
+                        <span class="text-lg font-bold text-green-700">01</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">New Institution: Vedantu Go-Live</p>
+                        <p class="text-xs text-gray-500">Full platform access activation</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-green-100 text-green-800 mt-1">Onboarding</span>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 hover:bg-gray-50">
+                <div class="flex items-center space-x-3">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-red-100 flex flex-col items-center justify-center">
+                        <span class="text-xs font-medium text-red-600">Apr</span>
+                        <span class="text-lg font-bold text-red-700">05</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">SSL Certificate Renewal (5 domains)</p>
+                        <p class="text-xs text-gray-500">Auto-renewal scheduled</p>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-red-100 text-red-800 mt-1">Infrastructure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

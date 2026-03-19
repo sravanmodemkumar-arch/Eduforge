@@ -1,0 +1,225 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Active Sessions - Super Admin{% endblock %}
+{% block page_title %}Active Sessions{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">Monitor and manage all active user sessions across the platform.</p>
+        <div class="flex items-center space-x-2">
+            <button class="inline-flex items-center rounded-md border border-red-300 bg-white px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50"
+                    hx-post="/sa/security/sessions/terminate-all/"
+                    hx-confirm="This will terminate ALL sessions except yours. Are you sure?">
+                Terminate All Sessions
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p class="text-xs text-gray-500">Active Sessions</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1">4,218</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p class="text-xs text-gray-500">Admin Sessions</p>
+            <p class="text-2xl font-bold text-indigo-600 mt-1">142</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p class="text-xs text-gray-500">Student Sessions</p>
+            <p class="text-2xl font-bold text-gray-900 mt-1">3,890</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <p class="text-xs text-gray-500">Platform Staff</p>
+            <p class="text-2xl font-bold text-amber-600 mt-1">6</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="flex flex-wrap items-center gap-3">
+            <input type="text" placeholder="Search user or IP..." class="flex-1 min-w-[200px] rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <select class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">All Roles</option>
+                <option>Super Admin</option>
+                <option>Platform Staff</option>
+                <option>Institution Admin</option>
+                <option>Teacher</option>
+                <option>Student</option>
+            </select>
+            <select class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">All Devices</option>
+                <option>Desktop</option>
+                <option>Mobile</option>
+                <option>Tablet</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Sessions Table -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Device</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Started</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Activity</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50 bg-amber-50/30">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-amber-500 flex items-center justify-center text-xs font-bold text-white">SA</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Super Admin</p>
+                                    <p class="text-xs text-gray-500">admin@eduforge.io <span class="text-amber-600 font-medium">(You)</span></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">103.21.45.128</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center text-xs text-gray-500">
+                                <svg class="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" /></svg>
+                                Chrome 123 / macOS
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 09:30</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center text-xs text-green-600">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
+                                Just now
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <span class="text-xs text-gray-400">Current session</span>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold text-white">RK</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Rajesh Kumar</p>
+                                    <p class="text-xs text-gray-500">rajesh@eduforge.io (Platform Staff)</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">182.76.12.55</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center text-xs text-gray-500">
+                                <svg class="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" /></svg>
+                                Firefox 124 / Windows 11
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 08:15</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">5 min ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button class="text-xs text-red-600 hover:text-red-800 font-medium"
+                                    hx-post="/sa/security/sessions/terminate/sess-rk-001/"
+                                    hx-confirm="Terminate this session?">Terminate</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700">VE</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Amit Verma</p>
+                                    <p class="text-xs text-gray-500">amit@vidyaedutech.com (Inst Admin)</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">122.172.83.45</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center text-xs text-gray-500">
+                                <svg class="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+                                Chrome Mobile / Android 15
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 10:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">12 min ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button class="text-xs text-red-600 hover:text-red-800 font-medium">Terminate</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-green-100 flex items-center justify-center text-xs font-bold text-green-700">SM</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Sneha Mishra</p>
+                                    <p class="text-xs text-gray-500">sneha@topperclasses.com (Teacher)</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">49.36.192.44</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center text-xs text-gray-500">
+                                <svg class="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25" /></svg>
+                                Safari 18 / macOS
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 07:45</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">28 min ago</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button class="text-xs text-red-600 hover:text-red-800 font-medium">Terminate</button>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-700">RS</div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">Rahul Singh</p>
+                                    <p class="text-xs text-gray-500">rahul.s@sscexamprep.com (Student)</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">117.200.45.67</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center text-xs text-gray-500">
+                                <svg class="h-4 w-4 mr-1 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+                                Chrome Mobile / Android 14
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 11:20</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center text-xs text-green-600">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
+                                Active now
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <button class="text-xs text-red-600 hover:text-red-800 font-medium">Terminate</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between px-6 py-3 border-t border-gray-200 bg-gray-50">
+            <p class="text-sm text-gray-500">Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">4,218</span> active sessions</p>
+            <div class="flex items-center space-x-2">
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-500 hover:bg-gray-50" disabled>Previous</button>
+                <button class="rounded-md border border-indigo-500 bg-indigo-50 px-3 py-1.5 text-sm font-medium text-indigo-600">1</button>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">2</button>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">3</button>
+                <span class="text-gray-400">...</span>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">844</button>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

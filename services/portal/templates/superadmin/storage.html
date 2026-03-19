@@ -1,0 +1,133 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Storage Dashboard - Super Admin{% endblock %}
+{% block page_title %}Storage Dashboard{% endblock %}
+{% block content %}
+<div>
+    <!-- Storage Summary -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Total Used</p>
+            <p class="text-2xl font-bold text-gray-900">234 GB</p>
+            <p class="text-xs text-gray-400 mt-1">of 500 GB provisioned</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Videos</p>
+            <p class="text-2xl font-bold text-indigo-600">156 GB</p>
+            <p class="text-xs text-gray-400 mt-1">66.7% of total</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Documents</p>
+            <p class="text-2xl font-bold text-emerald-600">52 GB</p>
+            <p class="text-xs text-gray-400 mt-1">22.2% of total</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Orphaned Files</p>
+            <p class="text-2xl font-bold text-red-600">8.4 GB</p>
+            <p class="text-xs text-gray-400 mt-1">142 files</p>
+        </div>
+    </div>
+
+    <!-- Usage Bar -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Storage Utilization</h2>
+        <div class="w-full bg-gray-200 rounded-full h-6 mb-2">
+            <div class="flex h-6 rounded-full overflow-hidden">
+                <div class="bg-indigo-500 h-6" style="width: 31.2%"></div>
+                <div class="bg-emerald-500 h-6" style="width: 10.4%"></div>
+                <div class="bg-amber-500 h-6" style="width: 5.2%"></div>
+            </div>
+        </div>
+        <div class="flex items-center space-x-6 text-xs text-gray-600">
+            <span class="flex items-center"><span class="w-3 h-3 bg-indigo-500 rounded-full mr-1"></span>Videos (156 GB)</span>
+            <span class="flex items-center"><span class="w-3 h-3 bg-emerald-500 rounded-full mr-1"></span>Documents (52 GB)</span>
+            <span class="flex items-center"><span class="w-3 h-3 bg-amber-500 rounded-full mr-1"></span>Images (26 GB)</span>
+            <span class="flex items-center"><span class="w-3 h-3 bg-gray-300 rounded-full mr-1"></span>Available (266 GB)</span>
+        </div>
+    </div>
+
+    <!-- Per-Institution Breakdown -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Per-Institution Breakdown</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institution</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Videos</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Documents</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Images</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usage</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Allen Career Institute</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">42.3 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">12.1 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">5.8 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">60.2 GB</td>
+                        <td class="px-6 py-4"><div class="w-24 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 60%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Unacademy</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">38.7 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">9.4 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">4.2 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">52.3 GB</td>
+                        <td class="px-6 py-4"><div class="w-24 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 52%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Physics Wallah</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">34.1 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">8.2 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">3.6 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">45.9 GB</td>
+                        <td class="px-6 py-4"><div class="w-24 bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 46%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Others (139 institutions)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">40.9 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">22.3 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">12.4 GB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">75.6 GB</td>
+                        <td class="px-6 py-4"><div class="w-24 bg-gray-200 rounded-full h-2"><div class="bg-gray-400 h-2 rounded-full" style="width: 76%"></div></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Orphaned Files -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900">Orphaned Files</h2>
+            <button class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100" hx-post="/sa/storage/orphaned/cleanup/" hx-confirm="Clean up all 142 orphaned files? This will free 8.4 GB.">
+                <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                Clean Up All (8.4 GB)
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-red-50 rounded-lg p-4 border border-red-100">
+                    <p class="text-sm font-medium text-red-800">Orphaned Videos</p>
+                    <p class="text-xl font-bold text-red-700 mt-1">34 files (5.2 GB)</p>
+                    <p class="text-xs text-red-600 mt-1">Referenced content deleted</p>
+                </div>
+                <div class="bg-red-50 rounded-lg p-4 border border-red-100">
+                    <p class="text-sm font-medium text-red-800">Orphaned PDFs</p>
+                    <p class="text-xl font-bold text-red-700 mt-1">78 files (2.4 GB)</p>
+                    <p class="text-xs text-red-600 mt-1">Upload abandoned or failed</p>
+                </div>
+                <div class="bg-red-50 rounded-lg p-4 border border-red-100">
+                    <p class="text-sm font-medium text-red-800">Orphaned Images</p>
+                    <p class="text-xl font-bold text-red-700 mt-1">30 files (0.8 GB)</p>
+                    <p class="text-xs text-red-600 mt-1">Thumbnail generation artifacts</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

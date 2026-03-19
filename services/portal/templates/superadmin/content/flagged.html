@@ -1,0 +1,209 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Flagged Content - Super Admin{% endblock %}
+{% block page_title %}Flagged Content{% endblock %}
+{% block content %}
+<div x-data="{ showDeleteModal: false, selectedItem: null }">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+        <div>
+            <p class="text-sm text-gray-500">Review and manage content that has been flagged by users or automated systems.</p>
+        </div>
+        <div class="flex items-center space-x-3">
+            <select class="text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="">All Types</option>
+                <option>MCQ</option>
+                <option>Note</option>
+                <option>Video</option>
+                <option>Test</option>
+                <option>PYP</option>
+            </select>
+            <select class="text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                <option value="">All Reasons</option>
+                <option>Incorrect Answer</option>
+                <option>Duplicate</option>
+                <option>Inappropriate</option>
+                <option>Copyright</option>
+                <option>Outdated</option>
+            </select>
+            <button class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors">
+                <svg class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Total Flagged</p>
+            <p class="text-2xl font-bold text-red-600">1,247</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Pending Review</p>
+            <p class="text-2xl font-bold text-yellow-600">834</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Resolved Today</p>
+            <p class="text-2xl font-bold text-green-600">56</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Avg Resolution Time</p>
+            <p class="text-2xl font-bold text-gray-900">4.2h</p>
+        </div>
+    </div>
+
+    <!-- Flagged Content Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Content ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flagged By</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institution</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-indigo-600">MCQ-284731</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">MCQ</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Physics - Thermodynamics</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Rajesh Kumar (Student)</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Incorrect Answer</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Allen Career Institute</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">19 Mar 2026, 10:42 AM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <a href="/sa/content/flagged/MCQ-284731/review/" class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">Review</a>
+                            <button @click="selectedItem = 'MCQ-284731'; showDeleteModal = true" class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-indigo-600">VID-019283</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Video</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Chemistry - Organic Reactions</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Auto-Moderation System</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Copyright</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Unacademy</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">19 Mar 2026, 09:15 AM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <a href="/sa/content/flagged/VID-019283/review/" class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">Review</a>
+                            <button @click="selectedItem = 'VID-019283'; showDeleteModal = true" class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-indigo-600">NOTE-087421</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Note</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Maths - Calculus</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Priya Sharma (Faculty)</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Duplicate</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Physics Wallah</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">18 Mar 2026, 06:30 PM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <a href="/sa/content/flagged/NOTE-087421/review/" class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">Review</a>
+                            <button @click="selectedItem = 'NOTE-087421'; showDeleteModal = true" class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-indigo-600">MCQ-384210</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">MCQ</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Biology - Genetics</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Amit Patel (Student)</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Inappropriate</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Aakash Institute</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">18 Mar 2026, 04:12 PM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <a href="/sa/content/flagged/MCQ-384210/review/" class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">Review</a>
+                            <button @click="selectedItem = 'MCQ-384210'; showDeleteModal = true" class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-indigo-600">TEST-005847</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">Test</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GK - Current Affairs March</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Sneha Reddy (Faculty)</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">Outdated</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Byju's</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">18 Mar 2026, 02:00 PM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <a href="/sa/content/flagged/TEST-005847/review/" class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">Review</a>
+                            <button @click="selectedItem = 'TEST-005847'; showDeleteModal = true" class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-indigo-600">PYP-002134</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">PYP</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">SSC CGL 2024 Paper</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Auto-Moderation System</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Copyright</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Testbook</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">17 Mar 2026, 11:45 AM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <a href="/sa/content/flagged/PYP-002134/review/" class="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">Review</a>
+                            <button @click="selectedItem = 'PYP-002134'; showDeleteModal = true" class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Pagination -->
+        <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <p class="text-sm text-gray-500">Showing <span class="font-medium">1</span> to <span class="font-medium">6</span> of <span class="font-medium">834</span> results</p>
+            <div class="flex items-center space-x-2">
+                <button class="px-3 py-1.5 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50" disabled>Previous</button>
+                <button class="px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg">1</button>
+                <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">2</button>
+                <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">3</button>
+                <span class="text-gray-400">...</span>
+                <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">139</button>
+                <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div x-show="showDeleteModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center" x-transition>
+        <div class="fixed inset-0 bg-gray-900/50" @click="showDeleteModal = false"></div>
+        <div class="relative bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Delete Flagged Content</h3>
+            <p class="text-sm text-gray-600 mb-4">Are you sure you want to delete content <span class="font-mono font-medium text-red-600" x-text="selectedItem"></span>? This action cannot be undone.</p>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Reason for deletion</label>
+                <textarea rows="3" class="w-full text-sm border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500" placeholder="Provide reason for deletion..."></textarea>
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button @click="showDeleteModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">Cancel</button>
+                <button @click="showDeleteModal = false" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors">Delete Content</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

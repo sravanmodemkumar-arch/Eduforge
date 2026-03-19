@@ -1,0 +1,134 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Trash - Super Admin{% endblock %}
+{% block page_title %}Trash{% endblock %}
+{% block content %}
+<div x-data="{ activeTab: 'institutions', showPurgeModal: false, purgeItem: null }">
+    <!-- Summary -->
+    <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+            <p class="text-sm text-yellow-800">Items in trash are automatically purged after <strong>30 days</strong>. Restore items before they are permanently deleted.</p>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="border-b border-gray-200 mb-6">
+        <nav class="flex space-x-6 -mb-px">
+            <button @click="activeTab = 'institutions'" :class="activeTab === 'institutions' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 px-1 text-sm font-medium border-b-2 transition-colors">Institutions <span class="ml-1 bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs">2</span></button>
+            <button @click="activeTab = 'users'" :class="activeTab === 'users' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 px-1 text-sm font-medium border-b-2 transition-colors">Users <span class="ml-1 bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs">18</span></button>
+            <button @click="activeTab = 'questions'" :class="activeTab === 'questions' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 px-1 text-sm font-medium border-b-2 transition-colors">Questions <span class="ml-1 bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs">342</span></button>
+            <button @click="activeTab = 'notes'" :class="activeTab === 'notes' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 px-1 text-sm font-medium border-b-2 transition-colors">Notes <span class="ml-1 bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs">87</span></button>
+            <button @click="activeTab = 'videos'" :class="activeTab === 'videos' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 px-1 text-sm font-medium border-b-2 transition-colors">Videos <span class="ml-1 bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs">23</span></button>
+            <button @click="activeTab = 'tests'" :class="activeTab === 'tests' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="pb-3 px-1 text-sm font-medium border-b-2 transition-colors">Tests <span class="ml-1 bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs">14</span></button>
+        </nav>
+    </div>
+
+    <!-- Institutions Tab -->
+    <div x-show="activeTab === 'institutions'" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deleted By</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deleted On</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Auto-Purge</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">CareerLauncher Test Prep</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Super Admin</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15 Mar 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">14 Apr 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <button class="inline-flex items-center px-3 py-1 text-xs font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100" hx-post="/sa/trash/institutions/restore/1/" hx-confirm="Restore this institution?">Restore</button>
+                            <button @click="purgeItem = 'CareerLauncher Test Prep'; showPurgeModal = true" class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100">Purge</button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">MockTest Academy (Demo)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Super Admin</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10 Mar 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">09 Apr 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <button class="inline-flex items-center px-3 py-1 text-xs font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100" hx-post="/sa/trash/institutions/restore/2/" hx-confirm="Restore this institution?">Restore</button>
+                            <button @click="purgeItem = 'MockTest Academy (Demo)'; showPurgeModal = true" class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100">Purge</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Users Tab -->
+    <div x-show="activeTab === 'users'" x-cloak class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institution</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deleted On</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Auto-Purge</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap"><div class="flex items-center"><div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-xs font-bold text-white mr-3">RS</div><div><p class="text-sm font-medium text-gray-900">Rahul Saxena</p><p class="text-xs text-gray-500">rahul.s@email.com</p></div></div></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Unacademy</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">17 Mar 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">16 Apr 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <button class="inline-flex items-center px-3 py-1 text-xs font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100">Restore</button>
+                            <button class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100">Purge</button>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap"><div class="flex items-center"><div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-xs font-bold text-white mr-3">AD</div><div><p class="text-sm font-medium text-gray-900">Ananya Deshmukh</p><p class="text-xs text-gray-500">ananya.d@email.com</p></div></div></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Allen Career Institute</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">16 Mar 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">15 Apr 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm space-x-2">
+                            <button class="inline-flex items-center px-3 py-1 text-xs font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100">Restore</button>
+                            <button class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100">Purge</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Questions Tab -->
+    <div x-show="activeTab === 'questions'" x-cloak class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+        <p class="text-sm text-gray-500">342 deleted questions. <a href="#" class="text-indigo-600 hover:underline font-medium">View all</a></p>
+    </div>
+    <!-- Notes Tab -->
+    <div x-show="activeTab === 'notes'" x-cloak class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+        <p class="text-sm text-gray-500">87 deleted notes. <a href="#" class="text-indigo-600 hover:underline font-medium">View all</a></p>
+    </div>
+    <!-- Videos Tab -->
+    <div x-show="activeTab === 'videos'" x-cloak class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+        <p class="text-sm text-gray-500">23 deleted videos. <a href="#" class="text-indigo-600 hover:underline font-medium">View all</a></p>
+    </div>
+    <!-- Tests Tab -->
+    <div x-show="activeTab === 'tests'" x-cloak class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+        <p class="text-sm text-gray-500">14 deleted tests. <a href="#" class="text-indigo-600 hover:underline font-medium">View all</a></p>
+    </div>
+
+    <!-- Purge Modal -->
+    <div x-show="showPurgeModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center" x-transition>
+        <div class="fixed inset-0 bg-gray-900/50" @click="showPurgeModal = false"></div>
+        <div class="relative bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Permanently Delete</h3>
+            <p class="text-sm text-gray-600 mb-4">Are you sure you want to permanently delete <span class="font-medium text-red-600" x-text="purgeItem"></span>? This action is irreversible.</p>
+            <div class="flex justify-end space-x-3">
+                <button @click="showPurgeModal = false" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+                <button @click="showPurgeModal = false" class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">Permanently Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

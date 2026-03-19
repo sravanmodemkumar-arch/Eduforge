@@ -1,0 +1,365 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Subscription Plans - Super Admin{% endblock %}
+{% block page_title %}Subscription Plans{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">Manage subscription plans and pricing tiers for institutions.</p>
+        <a href="/sa/subscriptions/plans/create/" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+            <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            Create Plan
+        </a>
+    </div>
+
+    <!-- Plans Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+        {% for plan in plans %}
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow {% if plan.highlighted %}ring-2 ring-indigo-500{% endif %}">
+            {% if plan.highlighted %}
+            <div class="bg-indigo-600 text-white text-center text-xs font-semibold py-1">Most Popular</div>
+            {% endif %}
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">{{ plan.name }}</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">{{ plan.description }}</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium {{ plan.badge_class }}">{{ plan.badge }}</span>
+                </div>
+                <div class="mb-5">
+                    <span class="text-3xl font-bold text-gray-900">{{ plan.price }}</span>
+                    {% if plan.cycle %}<span class="text-sm text-gray-500">/{{ plan.cycle }}</span>{% endif %}
+                </div>
+                <ul class="space-y-2.5 mb-6">
+                    {% for feature in plan.features %}
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        {{ feature }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <div class="flex items-center space-x-2">
+                    <a href="/sa/subscriptions/plans/{{ plan.id }}/edit/" class="flex-1 text-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Edit</a>
+                    <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500 hover:bg-gray-50">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-6 py-3 bg-gray-50 flex items-center justify-between text-xs text-gray-500">
+                <span>{{ plan.subscribers }} subscribers</span>
+                <span>{{ plan.revenue_share }}% of revenue</span>
+            </div>
+        </div>
+        {% empty %}
+        <!-- Hardcoded fallback when no context -->
+
+        <!-- Free Trial -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">Free Trial</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">14-day trial for new institutions</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600">Trial</span>
+                </div>
+                <div class="mb-5">
+                    <span class="text-3xl font-bold text-gray-900">&#8377;0</span>
+                    <span class="text-sm text-gray-500">/14 days</span>
+                </div>
+                <ul class="space-y-2.5 mb-6">
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Up to 50 students
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        500 MB storage
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        5 mock tests
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Basic analytics
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Email support
+                    </li>
+                </ul>
+                <div class="flex items-center space-x-2">
+                    <a href="/sa/subscriptions/plans/free-trial/edit/" class="flex-1 text-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Edit</a>
+                    <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500 hover:bg-gray-50">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-6 py-3 bg-gray-50 flex items-center justify-between text-xs text-gray-500">
+                <span>42 active trials</span>
+                <span>0% of revenue</span>
+            </div>
+        </div>
+
+        <!-- Starter -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">Starter</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">For small coaching centres</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">Active</span>
+                </div>
+                <div class="mb-5">
+                    <span class="text-3xl font-bold text-gray-900">&#8377;1,999</span>
+                    <span class="text-sm text-gray-500">/month</span>
+                </div>
+                <ul class="space-y-2.5 mb-6">
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Up to 200 students
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        5 GB storage
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        50 mock tests/month
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Standard analytics
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Email + chat support
+                    </li>
+                </ul>
+                <div class="flex items-center space-x-2">
+                    <a href="/sa/subscriptions/plans/starter/edit/" class="flex-1 text-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Edit</a>
+                    <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500 hover:bg-gray-50">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-6 py-3 bg-gray-50 flex items-center justify-between text-xs text-gray-500">
+                <span>128 subscribers</span>
+                <span>8.2% of revenue</span>
+            </div>
+        </div>
+
+        <!-- Basic -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">Basic</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">For growing institutions</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">Active</span>
+                </div>
+                <div class="mb-5">
+                    <span class="text-3xl font-bold text-gray-900">&#8377;4,999</span>
+                    <span class="text-sm text-gray-500">/month</span>
+                </div>
+                <ul class="space-y-2.5 mb-6">
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Up to 1,000 students
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        25 GB storage
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Unlimited mock tests
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Advanced analytics + reports
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Custom subdomain
+                    </li>
+                </ul>
+                <div class="flex items-center space-x-2">
+                    <a href="/sa/subscriptions/plans/basic/edit/" class="flex-1 text-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Edit</a>
+                    <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500 hover:bg-gray-50">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-6 py-3 bg-gray-50 flex items-center justify-between text-xs text-gray-500">
+                <span>245 subscribers</span>
+                <span>24.6% of revenue</span>
+            </div>
+        </div>
+
+        <!-- Pro (Highlighted) -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow ring-2 ring-indigo-500">
+            <div class="bg-indigo-600 text-white text-center text-xs font-semibold py-1">Most Popular</div>
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">Pro</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">For established coaching chains</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-indigo-50 px-2 py-1 text-xs font-medium text-indigo-700">Popular</span>
+                </div>
+                <div class="mb-5">
+                    <span class="text-3xl font-bold text-gray-900">&#8377;9,999</span>
+                    <span class="text-sm text-gray-500">/month</span>
+                </div>
+                <ul class="space-y-2.5 mb-6">
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Up to 5,000 students
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        100 GB storage
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Unlimited tests + AI generation
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Custom domain + white-label
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Priority phone + chat support
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        WhatsApp notifications
+                    </li>
+                </ul>
+                <div class="flex items-center space-x-2">
+                    <a href="/sa/subscriptions/plans/pro/edit/" class="flex-1 text-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Edit</a>
+                    <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500 hover:bg-gray-50">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-6 py-3 bg-gray-50 flex items-center justify-between text-xs text-gray-500">
+                <span>312 subscribers</span>
+                <span>42.8% of revenue</span>
+            </div>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">Enterprise</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">For large institutes and universities</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">Premium</span>
+                </div>
+                <div class="mb-5">
+                    <span class="text-3xl font-bold text-gray-900">&#8377;24,999</span>
+                    <span class="text-sm text-gray-500">/month</span>
+                </div>
+                <ul class="space-y-2.5 mb-6">
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Unlimited students
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        500 GB storage
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        All Pro features + API access
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Dedicated account manager
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        SLA guarantee (99.9% uptime)
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Custom integrations
+                    </li>
+                </ul>
+                <div class="flex items-center space-x-2">
+                    <a href="/sa/subscriptions/plans/enterprise/edit/" class="flex-1 text-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Edit</a>
+                    <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500 hover:bg-gray-50">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-6 py-3 bg-gray-50 flex items-center justify-between text-xs text-gray-500">
+                <span>38 subscribers</span>
+                <span>18.4% of revenue</span>
+            </div>
+        </div>
+
+        <!-- Group -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900">Group</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">For coaching institute chains (5+ branches)</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-1 text-xs font-medium text-purple-700">Custom</span>
+                </div>
+                <div class="mb-5">
+                    <span class="text-3xl font-bold text-gray-900">Custom</span>
+                    <span class="text-sm text-gray-500">/negotiated</span>
+                </div>
+                <ul class="space-y-2.5 mb-6">
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Multi-branch management
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        All Enterprise features
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Volume discounts
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        Centralized billing
+                    </li>
+                    <li class="flex items-start text-sm text-gray-600">
+                        <svg class="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                        White-glove onboarding
+                    </li>
+                </ul>
+                <div class="flex items-center space-x-2">
+                    <a href="/sa/subscriptions/plans/group/edit/" class="flex-1 text-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Edit</a>
+                    <button class="rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-500 hover:bg-gray-50">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-6 py-3 bg-gray-50 flex items-center justify-between text-xs text-gray-500">
+                <span>8 subscribers</span>
+                <span>6.0% of revenue</span>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

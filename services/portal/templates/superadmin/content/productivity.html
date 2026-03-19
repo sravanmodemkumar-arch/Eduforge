@@ -1,0 +1,219 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Creator Productivity - Super Admin{% endblock %}
+{% block page_title %}Creator Productivity{% endblock %}
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+        <p class="text-sm text-gray-500">Track content creator performance across all institutions.</p>
+        <div class="flex items-center space-x-3">
+            <select class="text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                <option>All Institutions</option>
+                <option>Allen Career Institute</option>
+                <option>Unacademy</option>
+                <option>Physics Wallah</option>
+                <option>Aakash Institute</option>
+            </select>
+            <select class="text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                <option>This Month</option>
+                <option>Last Month</option>
+                <option>Last 3 Months</option>
+                <option>Last 6 Months</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Active Creators</p>
+            <p class="text-2xl font-bold text-gray-900">1,284</p>
+            <p class="text-xs text-green-600 mt-1">+12% from last month</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Avg Content/Creator</p>
+            <p class="text-2xl font-bold text-gray-900">47.3</p>
+            <p class="text-xs text-green-600 mt-1">+5.2% from last month</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Avg Quality Score</p>
+            <p class="text-2xl font-bold text-gray-900">8.4/10</p>
+            <p class="text-xs text-green-600 mt-1">+0.3 from last month</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Avg Rejection Rate</p>
+            <p class="text-2xl font-bold text-gray-900">6.2%</p>
+            <p class="text-xs text-red-600 mt-1">+0.8% from last month</p>
+        </div>
+    </div>
+
+    <!-- Productivity Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h2 class="text-lg font-semibold text-gray-900">Creator Performance</h2>
+            <div class="relative">
+                <input type="text" placeholder="Search creators..." class="text-sm border-gray-300 rounded-lg pl-9 focus:ring-indigo-500 focus:border-indigo-500 w-64">
+                <svg class="absolute left-3 top-2.5 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+            </div>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institution</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">This Month</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Quality Score</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Rejection Rate</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-indigo-500 flex items-center justify-center text-xs font-bold text-white mr-3">AK</div>
+                                <span class="text-sm font-medium text-gray-900">Dr. Ankit Kapoor</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Senior Faculty</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Allen Career Institute</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">342 items</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end">
+                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 96%"></div>
+                                </div>
+                                <span class="text-sm font-medium text-green-600">9.6</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">1.2%</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-emerald-500 flex items-center justify-center text-xs font-bold text-white mr-3">SM</div>
+                                <span class="text-sm font-medium text-gray-900">Shalini Mehta</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Content Lead</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Unacademy</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">287 items</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end">
+                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 92%"></div>
+                                </div>
+                                <span class="text-sm font-medium text-green-600">9.2</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">2.8%</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-amber-500 flex items-center justify-center text-xs font-bold text-white mr-3">RV</div>
+                                <span class="text-sm font-medium text-gray-900">Rohit Verma</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Faculty</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Physics Wallah</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">215 items</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end">
+                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 87%"></div>
+                                </div>
+                                <span class="text-sm font-medium text-green-600">8.7</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">4.5%</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center text-xs font-bold text-white mr-3">PG</div>
+                                <span class="text-sm font-medium text-gray-900">Pooja Gupta</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Content Writer</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Aakash Institute</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">189 items</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end">
+                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-yellow-500 h-2 rounded-full" style="width: 76%"></div>
+                                </div>
+                                <span class="text-sm font-medium text-yellow-600">7.6</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">7.1%</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-red-500 flex items-center justify-center text-xs font-bold text-white mr-3">KS</div>
+                                <span class="text-sm font-medium text-gray-900">Karan Singh</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Junior Faculty</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Testbook</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">124 items</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end">
+                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-red-500 h-2 rounded-full" style="width: 58%"></div>
+                                </div>
+                                <span class="text-sm font-medium text-red-600">5.8</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">14.3%</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-cyan-500 flex items-center justify-center text-xs font-bold text-white mr-3">NJ</div>
+                                <span class="text-sm font-medium text-gray-900">Neha Joshi</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Video Creator</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">Byju's</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">98 items</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <div class="flex items-center justify-end">
+                                <div class="w-16 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 91%"></div>
+                                </div>
+                                <span class="text-sm font-medium text-green-600">9.1</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">1.8%</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <p class="text-sm text-gray-500">Showing <span class="font-medium">1</span> to <span class="font-medium">6</span> of <span class="font-medium">1,284</span> creators</p>
+            <div class="flex items-center space-x-2">
+                <button class="px-3 py-1.5 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50" disabled>Previous</button>
+                <button class="px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-lg">1</button>
+                <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">2</button>
+                <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">3</button>
+                <button class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

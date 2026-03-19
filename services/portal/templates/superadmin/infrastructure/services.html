@@ -1,0 +1,184 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Service Health - Super Admin{% endblock %}
+{% block page_title %}Service Health{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">Real-time health monitoring of all platform microservices.</p>
+        <div class="flex items-center space-x-2">
+            <span class="inline-flex items-center text-xs text-gray-500">
+                <span class="w-2 h-2 rounded-full bg-green-500 mr-1.5 animate-pulse"></span>
+                Auto-refreshing every 30s
+            </span>
+            <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                    hx-get="/sa/infrastructure/services/"
+                    hx-target="#services-grid"
+                    hx-swap="innerHTML">
+                <svg class="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" /></svg>
+                Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- Service Cards Grid -->
+    <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4"
+         hx-get="/sa/infrastructure/services/health/"
+         hx-trigger="every 30s"
+         hx-swap="innerHTML">
+
+        {% for service in services %}
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">{{ service.name }}</h3>
+                    <p class="text-xs text-gray-500">Port {{ service.port }}</p>
+                </div>
+                <span class="flex h-3 w-3 rounded-full {{ service.status_color }}" title="{{ service.status }}"></span>
+            </div>
+            <div class="space-y-2.5">
+                <div class="flex justify-between text-xs"><span class="text-gray-500">P95 Latency</span><span class="font-medium text-gray-900">{{ service.p95 }}</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Error Rate</span><span class="font-medium {{ service.error_class }}">{{ service.error_rate }}</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">CPU</span><span class="font-medium text-gray-900">{{ service.cpu }}</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Memory</span><span class="font-medium text-gray-900">{{ service.memory }}</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Uptime</span><span class="font-medium text-green-600">{{ service.uptime }}</span></div>
+            </div>
+        </div>
+        {% empty %}
+
+        <!-- Hardcoded service cards -->
+
+        <!-- API Gateway -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">API Gateway</h3>
+                    <p class="text-xs text-gray-500">Port 8000</p>
+                </div>
+                <span class="flex h-3 w-3 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2.5">
+                <div class="flex justify-between text-xs"><span class="text-gray-500">P95 Latency</span><span class="font-medium text-gray-900">42ms</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Error Rate</span><span class="font-medium text-green-600">0.02%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">CPU</span><span class="font-medium text-gray-900">24%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Memory</span><span class="font-medium text-gray-900">512 MB / 2 GB</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Uptime</span><span class="font-medium text-green-600">45d 12h</span></div>
+            </div>
+        </div>
+
+        <!-- Auth Service -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">Auth Service</h3>
+                    <p class="text-xs text-gray-500">Port 8001</p>
+                </div>
+                <span class="flex h-3 w-3 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2.5">
+                <div class="flex justify-between text-xs"><span class="text-gray-500">P95 Latency</span><span class="font-medium text-gray-900">28ms</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Error Rate</span><span class="font-medium text-green-600">0.01%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">CPU</span><span class="font-medium text-gray-900">18%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Memory</span><span class="font-medium text-gray-900">384 MB / 1 GB</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Uptime</span><span class="font-medium text-green-600">45d 12h</span></div>
+            </div>
+        </div>
+
+        <!-- Exam Engine -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">Exam Engine</h3>
+                    <p class="text-xs text-gray-500">Port 8002</p>
+                </div>
+                <span class="flex h-3 w-3 rounded-full bg-amber-500" title="Degraded"></span>
+            </div>
+            <div class="space-y-2.5">
+                <div class="flex justify-between text-xs"><span class="text-gray-500">P95 Latency</span><span class="font-medium text-amber-600">185ms</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Error Rate</span><span class="font-medium text-amber-600">0.8%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">CPU</span><span class="font-medium text-amber-600">72%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Memory</span><span class="font-medium text-gray-900">1.4 GB / 2 GB</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Uptime</span><span class="font-medium text-green-600">12d 8h</span></div>
+            </div>
+        </div>
+
+        <!-- Content Service -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">Content Service</h3>
+                    <p class="text-xs text-gray-500">Port 8003</p>
+                </div>
+                <span class="flex h-3 w-3 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2.5">
+                <div class="flex justify-between text-xs"><span class="text-gray-500">P95 Latency</span><span class="font-medium text-gray-900">65ms</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Error Rate</span><span class="font-medium text-green-600">0.05%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">CPU</span><span class="font-medium text-gray-900">35%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Memory</span><span class="font-medium text-gray-900">680 MB / 2 GB</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Uptime</span><span class="font-medium text-green-600">45d 12h</span></div>
+            </div>
+        </div>
+
+        <!-- Notification Service -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">Notification Service</h3>
+                    <p class="text-xs text-gray-500">Port 8004</p>
+                </div>
+                <span class="flex h-3 w-3 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2.5">
+                <div class="flex justify-between text-xs"><span class="text-gray-500">P95 Latency</span><span class="font-medium text-gray-900">120ms</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Error Rate</span><span class="font-medium text-green-600">0.12%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">CPU</span><span class="font-medium text-gray-900">28%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Memory</span><span class="font-medium text-gray-900">420 MB / 1 GB</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Uptime</span><span class="font-medium text-green-600">30d 6h</span></div>
+            </div>
+        </div>
+
+        <!-- Payment Service -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">Payment Service</h3>
+                    <p class="text-xs text-gray-500">Port 8005</p>
+                </div>
+                <span class="flex h-3 w-3 rounded-full bg-green-500" title="Healthy"></span>
+            </div>
+            <div class="space-y-2.5">
+                <div class="flex justify-between text-xs"><span class="text-gray-500">P95 Latency</span><span class="font-medium text-gray-900">95ms</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Error Rate</span><span class="font-medium text-green-600">0.00%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">CPU</span><span class="font-medium text-gray-900">12%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Memory</span><span class="font-medium text-gray-900">256 MB / 1 GB</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Uptime</span><span class="font-medium text-green-600">45d 12h</span></div>
+            </div>
+        </div>
+
+        <!-- Worker / Background Jobs -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-900">Background Worker</h3>
+                    <p class="text-xs text-gray-500">Port 8006</p>
+                </div>
+                <span class="flex h-3 w-3 rounded-full bg-red-500" title="Unhealthy"></span>
+            </div>
+            <div class="space-y-2.5">
+                <div class="flex justify-between text-xs"><span class="text-gray-500">P95 Latency</span><span class="font-medium text-red-600">2,400ms</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Error Rate</span><span class="font-medium text-red-600">4.2%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">CPU</span><span class="font-medium text-red-600">94%</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Memory</span><span class="font-medium text-red-600">1.8 GB / 2 GB</span></div>
+                <div class="flex justify-between text-xs"><span class="text-gray-500">Uptime</span><span class="font-medium text-amber-600">2h 15m</span></div>
+            </div>
+            <div class="mt-3 p-2 bg-red-50 rounded text-xs text-red-700">
+                Queue depth: 2,450 jobs. Last restart: 2h ago. Consider scaling workers.
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
