@@ -56,6 +56,7 @@ class SubscriptionResponse(BaseModel):
     starts_at: datetime
     ends_at: datetime
     is_active: bool
+    auto_renew: bool
     created_at: datetime
     updated_at: datetime
 

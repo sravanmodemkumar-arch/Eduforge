@@ -53,10 +53,12 @@ class InvoiceResponse(BaseModel):
     igst: float
     total: float
     sac_code: str
+    hsn_code: str | None = None
     buyer_gstin: str | None = None
     seller_gstin: str | None = None
     r2_pdf_key: str | None = None
     status: InvoiceStatus
+    issued_at: datetime | None = None
     created_at: datetime
     updated_at: datetime
 
