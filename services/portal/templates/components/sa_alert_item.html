@@ -1,0 +1,63 @@
+{% comment %}
+Super Admin Alert Item Component
+Usage: {% include "components/sa_alert_item.html" with severity="critical" title="High CPU Usage" message="Server cpu-01 at 95%" time="2 min ago" %}
+{% endcomment %}
+<div class="flex items-start gap-3 rounded-lg border p-3 transition-colors duration-150
+    {% if severity == 'critical' %}border-red-200 bg-red-50 hover:bg-red-100
+    {% elif severity == 'warning' %}border-yellow-200 bg-yellow-50 hover:bg-yellow-100
+    {% elif severity == 'info' %}border-blue-200 bg-blue-50 hover:bg-blue-100
+    {% else %}border-gray-200 bg-gray-50 hover:bg-gray-100{% endif %}">
+    <!-- Severity Icon -->
+    <div class="flex-shrink-0 mt-0.5">
+        {% if severity == "critical" %}
+        <svg class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        {% elif severity == "warning" %}
+        <svg class="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        {% elif severity == "info" %}
+        <svg class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+        </svg>
+        {% else %}
+        <svg class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        {% endif %}
+    </div>
+    <!-- Content -->
+    <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between">
+            <p class="text-sm font-semibold
+                {% if severity == 'critical' %}text-red-800
+                {% elif severity == 'warning' %}text-yellow-800
+                {% elif severity == 'info' %}text-blue-800
+                {% else %}text-gray-800{% endif %}">
+                {{ title|default:"Alert" }}
+            </p>
+            <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium
+                {% if severity == 'critical' %}bg-red-100 text-red-700
+                {% elif severity == 'warning' %}bg-yellow-100 text-yellow-700
+                {% elif severity == 'info' %}bg-blue-100 text-blue-700
+                {% else %}bg-gray-100 text-gray-700{% endif %}">
+                {{ severity|default:"info"|title }}
+            </span>
+        </div>
+        <p class="mt-1 text-sm
+            {% if severity == 'critical' %}text-red-700
+            {% elif severity == 'warning' %}text-yellow-700
+            {% elif severity == 'info' %}text-blue-700
+            {% else %}text-gray-600{% endif %}">
+            {{ message|default:"No details available." }}
+        </p>
+        <p class="mt-1 text-xs text-gray-400">{{ time|default:"just now" }}</p>
+    </div>
+    <!-- Dismiss Button -->
+    <button class="flex-shrink-0 text-gray-400 hover:text-gray-600" title="Dismiss">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
+</div>
