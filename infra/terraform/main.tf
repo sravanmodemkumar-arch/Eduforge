@@ -290,3 +290,74 @@ resource "aws_cloudwatch_event_rule" "nightly_ranks" {
   description         = "Compute All India Ranks nightly at 3 AM IST"
   schedule_expression = "cron(30 21 * * ? *)"
 }
+
+resource "aws_cloudwatch_event_target" "nightly_cleanup_target" {
+  rule      = aws_cloudwatch_event_rule.nightly_cleanup.name
+  target_id = "eduforge-exam-cleanup"
+  arn       = aws_lambda_function.services["exam"].arn
+  input     = jsonencode({ action = "nightly_cleanup" })
+}
+
+resource "aws_lambda_permission" "allow_eventbridge_cleanup" {
+  statement_id  = "AllowEventBridgeCleanup"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.services["exam"].function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.nightly_cleanup.arn
+}
+
+resource "aws_cloudwatch_event_target" "nightly_ranks_target" {
+  rule      = aws_cloudwatch_event_rule.nightly_ranks.name
+  target_id = "eduforge-analytics-ranks"
+  arn       = aws_lambda_function.services["analytics"].arn
+  input     = jsonencode({ action = "compute_ranks" })
+}
+
+resource "aws_lambda_permission" "allow_eventbridge_ranks" {
+  statement_id  = "AllowEventBridgeRanks"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.services["analytics"].function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.nightly_ranks.arn
+}
+
+# ─── API Gateway Integrations ──────────────────────────────────────
+resource "aws_apigatewayv2_integration" "lambda" {
+  for_each = aws_lambda_function.services
+
+  api_id                 = aws_apigatewayv2_api.main.id
+  integration_type       = "AWS_PROXY"
+  integration_uri        = each.value.invoke_arn
+  payload_format_version = "2.0"
+}
+
+resource "aws_apigatewayv2_route" "lambda" {
+  for_each = aws_lambda_function.services
+
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "ANY /${each.key}/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda[each.key].id}"
+}
+
+resource "aws_lambda_permission" "apigw" {
+  for_each = aws_lambda_function.services
+
+  statement_id  = "AllowAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = each.value.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.main.execution_arn}/*/*"
+}
+
+# ─── CloudWatch Log Groups ─────────────────────────────────────────
+resource "aws_cloudwatch_log_group" "portal" {
+  name              = "/ecs/eduforge-portal"
+  retention_in_days = 30
+}
+
+resource "aws_cloudwatch_log_group" "lambda" {
+  for_each = toset(["identity", "exam", "notification", "billing", "ai", "analytics"])
+
+  name              = "/aws/lambda/eduforge-${each.key}"
+  retention_in_days = 30
+}

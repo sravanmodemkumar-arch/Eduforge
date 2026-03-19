@@ -57,8 +57,10 @@ class PaymentResponse(BaseModel):
     currency: str
     razorpay_order_id: str | None = None
     razorpay_payment_id: str | None = None
+    razorpay_signature: str | None = None
     status: PaymentStatus
     method: str | None = None
+    fee_record_id: uuid.UUID | None = None
     description: str | None = None
     metadata: dict[str, Any] | None = Field(None, alias="metadata_")
     created_at: datetime
