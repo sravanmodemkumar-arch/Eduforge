@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Result - {{ test_title }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; padding: 2rem; }
+        .card { background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 2rem; max-width: 720px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 2rem; border-bottom: 2px solid #e8ecf1; padding-bottom: 1.5rem; }
+        .header h1 { font-size: 1.5rem; color: #1a1a2e; }
+        .header .subtitle { color: #666; margin-top: 0.25rem; }
+        .score-circle { width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(#4361ee {{ result.percentage }}%, #e8ecf1 0); display: flex; align-items: center; justify-content: center; margin: 1.5rem auto; }
+        .score-inner { width: 110px; height: 110px; border-radius: 50%; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .score-inner .pct { font-size: 2rem; font-weight: 700; color: #4361ee; }
+        .score-inner .label { font-size: 0.75rem; color: #888; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
+        .stat { text-align: center; padding: 1rem; background: #f8f9fc; border-radius: 8px; }
+        .stat .value { font-size: 1.25rem; font-weight: 600; }
+        .stat .label { font-size: 0.75rem; color: #888; margin-top: 0.25rem; }
+        .stat.correct .value { color: #22c55e; }
+        .stat.incorrect .value { color: #ef4444; }
+        .stat.unanswered .value { color: #f59e0b; }
+        .ranking { display: flex; justify-content: center; gap: 2rem; margin: 1.5rem 0; padding: 1rem; background: #f0f4ff; border-radius: 8px; }
+        .ranking .item { text-align: center; }
+        .ranking .item .value { font-size: 1.5rem; font-weight: 700; color: #4361ee; }
+        .ranking .item .label { font-size: 0.75rem; color: #666; }
+        .sections { margin-top: 1.5rem; }
+        .sections h3 { margin-bottom: 0.75rem; }
+        .section-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee; }
+        .footer { text-align: center; margin-top: 2rem; font-size: 0.75rem; color: #aaa; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h1>{{ test_title }}</h1>
+            <div class="subtitle">Exam Result Card</div>
+        </div>
+
+        <div class="score-circle">
+            <div class="score-inner">
+                <span class="pct">{{ "%.1f"|format(result.percentage) }}%</span>
+                <span class="label">Score</span>
+            </div>
+        </div>
+
+        <div style="text-align: center; font-size: 1.1rem; margin-bottom: 0.5rem;">
+            <strong>{{ result.total_score }}</strong> / {{ result.max_score }} marks
+        </div>
+
+        <div class="stats">
+            <div class="stat correct">
+                <div class="value">{{ result.correct_count }}</div>
+                <div class="label">Correct</div>
+            </div>
+            <div class="stat incorrect">
+                <div class="value">{{ result.incorrect_count }}</div>
+                <div class="label">Incorrect</div>
+            </div>
+            <div class="stat unanswered">
+                <div class="value">{{ result.unanswered_count }}</div>
+                <div class="label">Unanswered</div>
+            </div>
+        </div>
+
+        {% if result.rank is not none %}
+        <div class="ranking">
+            <div class="item">
+                <div class="value">{{ result.rank }}</div>
+                <div class="label">Rank</div>
+            </div>
+            <div class="item">
+                <div class="value">{{ result.total_participants }}</div>
+                <div class="label">Participants</div>
+            </div>
+            {% if result.percentile is not none %}
+            <div class="item">
+                <div class="value">{{ "%.1f"|format(result.percentile) }}%</div>
+                <div class="label">Percentile</div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if result.section_scores %}
+        <div class="sections">
+            <h3>Section-wise Performance</h3>
+            {% for section, data in result.section_scores.items() %}
+            <div class="section-row">
+                <span>{{ section }}</span>
+                <span>{{ data.score }} / {{ data.max_score }} ({{ data.correct }}C / {{ data.incorrect }}I / {{ data.unanswered }}U)</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="footer">
+            Generated on {{ generated_at }} &bull; EduForge
+        </div>
+    </div>
+</body>
+</html>
