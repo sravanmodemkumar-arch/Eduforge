@@ -84,6 +84,10 @@ class Invoice(Base):
         nullable=False,
         default="9993",
     )
+    hsn_code: Mapped[str | None] = mapped_column(
+        String(10),
+        nullable=True,
+    )
     buyer_gstin: Mapped[str | None] = mapped_column(
         String(15),
         nullable=True,
@@ -100,6 +104,10 @@ class Invoice(Base):
         Enum(InvoiceStatus, name="invoice_status", schema="billing"),
         nullable=False,
         default=InvoiceStatus.DRAFT,
+    )
+    issued_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

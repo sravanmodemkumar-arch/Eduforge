@@ -81,6 +81,20 @@ async def list_invoices(
     )
 
 
+@router.post(
+    "/{invoice_id}/regenerate",
+    response_model=InvoiceResponse,
+    summary="Regenerate invoice PDF",
+)
+async def regenerate_invoice_pdf(
+    invoice_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> InvoiceResponse:
+    """Regenerate the PDF for an existing invoice and upload to R2."""
+    invoice = await invoice_service.regenerate_invoice_pdf(db, invoice_id)
+    return InvoiceResponse.model_validate(invoice)
+
+
 @router.patch(
     "/{invoice_id}",
     response_model=InvoiceResponse,

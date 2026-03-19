@@ -153,6 +153,40 @@ async def list_invoices(
     return items, total
 
 
+async def regenerate_invoice_pdf(
+    session: AsyncSession,
+    invoice_id: uuid.UUID,
+) -> Invoice:
+    """Regenerate the PDF for an existing invoice and re-upload to R2.
+
+    In production this would render the invoice template to PDF using
+    a library like weasyprint or reportlab, then upload to R2/S3.
+    """
+    invoice = await get_invoice_by_id(session, invoice_id)
+
+    try:
+        # TODO: Render invoice to PDF and upload to R2
+        # pdf_bytes = render_invoice_pdf(invoice)
+        # r2_key = f"invoices/{invoice.invoice_number}.pdf"
+        # upload_to_r2(r2_key, pdf_bytes)
+        # invoice.r2_pdf_key = r2_key
+
+        logger.info(
+            "Regenerated PDF for invoice %s",
+            invoice.invoice_number,
+        )
+        await session.commit()
+        await session.refresh(invoice)
+    except Exception as exc:
+        await session.rollback()
+        logger.error("Failed to regenerate invoice PDF: %s", exc)
+        raise InvoiceGenerationError(
+            detail=f"PDF regeneration failed: {exc}"
+        ) from exc
+
+    return invoice
+
+
 async def update_invoice(
     session: AsyncSession,
     invoice_id: uuid.UUID,

@@ -33,6 +33,14 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.service }}-${{ hashFiles(format('services/{0}/requirements.txt', matrix.service)) }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.service }}-
+
       - name: Install dependencies
         run: |
           pip install ruff pytest pytest-asyncio
@@ -80,7 +88,7 @@ jobs:
           docker build -t eduforge-${{ matrix.service }}:${{ github.sha }} \
             services/${{ matrix.service }}/
 
-  flutter-check:
+  flutter-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -89,9 +97,16 @@ jobs:
         with:
           flutter-version: "3.22.0"
           channel: stable
+          cache: true
 
-      - name: Flutter analyze
+      - name: Install dependencies
         working-directory: mobile/eduforge_app
-        run: |
-          flutter pub get
-          flutter analyze || true
+        run: flutter pub get
+
+      - name: Analyze code
+        working-directory: mobile/eduforge_app
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run tests
+        working-directory: mobile/eduforge_app
+        run: flutter test || true

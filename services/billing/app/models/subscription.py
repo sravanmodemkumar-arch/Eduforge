@@ -75,6 +75,11 @@ class Subscription(Base):
         nullable=False,
         default=True,
     )
+    auto_renew: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=False,
+    )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
