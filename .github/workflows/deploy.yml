@@ -14,7 +14,7 @@ env:
   ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com
 
 jobs:
-  deploy-lambda-services:
+  deploy-lambda:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -32,17 +32,19 @@ jobs:
 
       - name: Build and push to ECR
         run: |
-          docker build -t $ECR_REGISTRY/eduforge-${{ matrix.service }}:latest \
+          docker build -t $ECR_REGISTRY/eduforge-${{ matrix.service }}:${{ github.sha }} \
+            -t $ECR_REGISTRY/eduforge-${{ matrix.service }}:latest \
             services/${{ matrix.service }}/
+          docker push $ECR_REGISTRY/eduforge-${{ matrix.service }}:${{ github.sha }}
           docker push $ECR_REGISTRY/eduforge-${{ matrix.service }}:latest
 
       - name: Update Lambda function
         run: |
           aws lambda update-function-code \
             --function-name eduforge-${{ matrix.service }} \
-            --image-uri $ECR_REGISTRY/eduforge-${{ matrix.service }}:latest
+            --image-uri $ECR_REGISTRY/eduforge-${{ matrix.service }}:${{ github.sha }}
 
-  deploy-ecs-portal:
+  deploy-ecs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,7 +59,10 @@ jobs:
 
       - name: Build and push portal image
         run: |
-          docker build -t $ECR_REGISTRY/eduforge-portal:latest services/portal/
+          docker build -t $ECR_REGISTRY/eduforge-portal:${{ github.sha }} \
+            -t $ECR_REGISTRY/eduforge-portal:latest \
+            services/portal/
+          docker push $ECR_REGISTRY/eduforge-portal:${{ github.sha }}
           docker push $ECR_REGISTRY/eduforge-portal:latest
 
       - name: Update ECS service
@@ -67,19 +72,73 @@ jobs:
             --service eduforge-portal \
             --force-new-deployment
 
+      - name: Wait for deployment stability
+        run: |
+          aws ecs wait services-stable \
+            --cluster eduforge \
+            --services eduforge-portal \
+            --timeout 300 || echo "WARNING: ECS service did not stabilize within timeout"
+
   health-check:
     runs-on: ubuntu-latest
-    needs: [deploy-lambda-services, deploy-ecs-portal]
+    needs: [deploy-lambda, deploy-ecs]
     steps:
-      - name: Wait for deployment
+      - name: Wait for deployment propagation
         run: sleep 60
 
-      - name: Check service health
+      - name: Check Lambda service health
         run: |
           API_URL="${{ secrets.API_GATEWAY_URL }}"
+          FAILED=0
           for service in identity exam notification billing ai analytics; do
             echo "Checking $service..."
-            curl -sf "$API_URL/$service/health" || echo "WARNING: $service health check failed"
+            if curl -sf --max-time 10 "$API_URL/$service/health"; then
+              echo " -> $service OK"
+            else
+              echo " -> WARNING: $service health check failed"
+              FAILED=$((FAILED + 1))
+            fi
           done
+
+      - name: Check portal health
+        run: |
           echo "Checking portal..."
-          curl -sf "${{ secrets.PORTAL_URL }}/health/" || echo "WARNING: portal health check failed"
+          curl -sf --max-time 10 "${{ secrets.PORTAL_URL }}/health/" || echo "WARNING: portal health check failed"
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: [health-check]
+    if: always()
+    steps:
+      - name: Determine deployment status
+        id: status
+        run: |
+          if [ "${{ needs.health-check.result }}" == "success" ]; then
+            echo "status=success" >> $GITHUB_OUTPUT
+            echo "message=EduForge deployment succeeded. All health checks passed." >> $GITHUB_OUTPUT
+          else
+            echo "status=failure" >> $GITHUB_OUTPUT
+            echo "message=EduForge deployment completed with issues. Check health checks." >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send WhatsApp notification
+        env:
+          WHATSAPP_API_URL: ${{ secrets.WHATSAPP_API_URL }}
+          WHATSAPP_API_TOKEN: ${{ secrets.WHATSAPP_API_TOKEN }}
+          WHATSAPP_NOTIFY_NUMBER: ${{ secrets.WHATSAPP_NOTIFY_NUMBER }}
+        run: |
+          if [ -n "$WHATSAPP_API_URL" ] && [ -n "$WHATSAPP_API_TOKEN" ]; then
+            curl -sf -X POST "$WHATSAPP_API_URL/messages" \
+              -H "Authorization: Bearer $WHATSAPP_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{
+                \"messaging_product\": \"whatsapp\",
+                \"to\": \"$WHATSAPP_NOTIFY_NUMBER\",
+                \"type\": \"text\",
+                \"text\": {
+                  \"body\": \"${{ steps.status.outputs.message }}\nCommit: ${{ github.sha }}\nBranch: ${{ github.ref_name }}\nActor: ${{ github.actor }}\"
+                }
+              }" || echo "WhatsApp notification failed"
+          else
+            echo "WhatsApp credentials not configured, skipping notification"
+          fi

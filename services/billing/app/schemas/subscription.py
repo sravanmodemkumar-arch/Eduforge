@@ -23,6 +23,7 @@ class SubscriptionCreate(BaseModel):
     max_students: int = Field(..., gt=0)
     starts_at: datetime
     ends_at: datetime
+    auto_renew: bool = False
 
 
 class SubscriptionUpdate(BaseModel):
@@ -35,6 +36,7 @@ class SubscriptionUpdate(BaseModel):
     starts_at: datetime | None = None
     ends_at: datetime | None = None
     is_active: bool | None = None
+    auto_renew: bool | None = None
 
 
 # ── Response schemas ─────────────────────────────────────────────────────
