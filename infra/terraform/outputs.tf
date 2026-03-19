@@ -27,3 +27,8 @@ output "sqs_notifications_queue_url" {
   description = "SQS notifications queue URL"
   value       = aws_sqs_queue.notifications.url
 }
+
+output "sqs_analytics_queue_url" {
+  description = "SQS analytics queue URL"
+  value       = aws_sqs_queue.analytics.url
+}
