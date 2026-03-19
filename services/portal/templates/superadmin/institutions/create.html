@@ -1,0 +1,156 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Create Institution - Super Admin{% endblock %}
+{% block page_title %}Create Institution{% endblock %}
+
+{% block content %}
+<div x-data="{ step: 1, totalSteps: 6, instType: '', plan: '', features: { exam: true, notes: true, video: true, ai: false, proctoring: false, parent: false, whatsapp: false, sms: true, branding: false, offline: false, analytics: true, certificates: false } }">
+
+    <!-- Step Indicator -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between max-w-3xl mx-auto">
+            {% for s in "1,2,3,4,5,6"|split:"," %}
+            <div class="flex items-center">
+                <div :class="step >= {{ s }} ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-500'" class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition-colors">{{ s }}</div>
+                {% if not forloop.last %}
+                <div :class="step > {{ s }} ? 'bg-indigo-600' : 'bg-gray-200'" class="h-0.5 w-12 sm:w-20 transition-colors"></div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <div class="flex justify-between max-w-3xl mx-auto mt-2 text-xs text-gray-500">
+            <span>Basic Info</span><span>Subscription</span><span>Features</span><span>Branding</span><span>Admin</span><span>Review</span>
+        </div>
+    </div>
+
+    <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+
+        <!-- Step 1: Basic Info -->
+        <div x-show="step === 1">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Institution Name *</label>
+                    <input type="text" class="w-full rounded-md border-gray-300 text-sm" placeholder="e.g., Sri Venkateswara Engineering College">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Code *</label>
+                        <input type="text" class="w-full rounded-md border-gray-300 text-sm" placeholder="SVEC-HYD-001">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Type *</label>
+                        <select x-model="instType" class="w-full rounded-md border-gray-300 text-sm">
+                            <option value="">Select type</option>
+                            <option value="SCHOOL">School</option>
+                            <option value="COLLEGE">College</option>
+                            <option value="COACHING">Coaching Centre</option>
+                            <option value="MOCK_TEST_DOMAIN">Mock Test Domain</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Parent Group</label>
+                    <select class="w-full rounded-md border-gray-300 text-sm">
+                        <option value="">None (Independent)</option>
+                        {% for g in groups %}<option value="{{ g.id }}">{{ g.name }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">Contact Email *</label><input type="email" class="w-full rounded-md border-gray-300 text-sm"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">Contact Phone *</label><input type="tel" class="w-full rounded-md border-gray-300 text-sm"></div>
+                </div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Address</label><textarea rows="2" class="w-full rounded-md border-gray-300 text-sm"></textarea></div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">City</label><input type="text" class="w-full rounded-md border-gray-300 text-sm"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">State</label><select class="w-full rounded-md border-gray-300 text-sm"><option>Select</option><option>Telangana</option><option>Andhra Pradesh</option><option>Karnataka</option><option>Tamil Nadu</option><option>Maharashtra</option><option>Delhi</option></select></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">Pincode</label><input type="text" class="w-full rounded-md border-gray-300 text-sm" maxlength="6"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Subscription -->
+        <div x-show="step === 2" x-cloak>
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Subscription Plan</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {% for p in "Free Trial:0:100:1,Starter:50K:500:10,Basic:1.2L:2000:25,Pro:1.8L:5000:50,Enterprise:2.5L:10000:100"|split:"," %}
+                {% with parts=p|split:":" %}
+                <label @click="plan = '{{ parts.0 }}'" :class="plan === '{{ parts.0 }}' ? 'ring-2 ring-indigo-600 bg-indigo-50' : 'ring-1 ring-gray-200'" class="relative flex cursor-pointer rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div>
+                        <p class="text-sm font-semibold text-gray-900">{{ parts.0 }}</p>
+                        <p class="text-xs text-gray-500 mt-0.5">&#8377;{{ parts.1 }}/yr &middot; {{ parts.2 }} students &middot; {{ parts.3 }} GB</p>
+                    </div>
+                </label>
+                {% endwith %}
+                {% endfor %}
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-4">
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Billing Cycle</label><select class="w-full rounded-md border-gray-300 text-sm"><option>Annual</option><option>Quarterly</option><option>Monthly</option></select></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Discount %</label><input type="number" min="0" max="50" value="0" class="w-full rounded-md border-gray-300 text-sm"></div>
+            </div>
+        </div>
+
+        <!-- Step 3: Features -->
+        <div x-show="step === 3" x-cloak>
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Feature Configuration</h2>
+            <div class="space-y-3">
+                {% for feat in "exam:Exam Module:Mock tests practice live exams,notes:Notes Module:Structured notes study materials,video:Video Module:Video lectures playlists,ai:AI Doubt Resolution:GPT-4 powered doubt solving,proctoring:Proctoring:Camera monitoring during exams,parent:Parent Portal:Parent access to child data,whatsapp:WhatsApp Notifications:Requires WhatsApp Business API,sms:SMS Notifications:OTP and alerts via SMS,branding:Custom Branding:Logo colours domain,offline:Offline Mode:Mobile app offline access,analytics:Analytics Dashboard:Reports and insights,certificates:Certificate Generation:Completion and rank certificates"|split:"," %}
+                {% with parts=feat|split:":" %}
+                <div class="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-gray-300">
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">{{ parts.1 }}</p>
+                        <p class="text-xs text-gray-500">{{ parts.2 }}</p>
+                    </div>
+                    <button @click="features.{{ parts.0 }} = !features.{{ parts.0 }}" :class="features.{{ parts.0 }} ? 'bg-indigo-600' : 'bg-gray-200'" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors">
+                        <span :class="features.{{ parts.0 }} ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition-transform mt-0.5 ml-0.5"></span>
+                    </button>
+                </div>
+                {% endwith %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Step 4: Branding -->
+        <div x-show="step === 4" x-cloak>
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Branding (Optional)</h2>
+            <div class="space-y-4">
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Logo</label><input type="file" accept="image/*" class="w-full text-sm text-gray-500 file:mr-3 file:rounded-md file:border-0 file:bg-indigo-50 file:px-3 file:py-2 file:text-sm file:font-medium file:text-indigo-700 hover:file:bg-indigo-100"></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">Primary Color</label><input type="color" value="#1E3A5F" class="w-full h-10 rounded-md border-gray-300"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-1">Secondary Color</label><input type="color" value="#3B82F6" class="w-full h-10 rounded-md border-gray-300"></div>
+                </div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Custom Domain</label><input type="text" class="w-full rounded-md border-gray-300 text-sm" placeholder="e.g., exams.svec.edu"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Welcome Message</label><textarea rows="2" class="w-full rounded-md border-gray-300 text-sm" placeholder="Welcome to our exam portal!"></textarea></div>
+            </div>
+        </div>
+
+        <!-- Step 5: Admin Account -->
+        <div x-show="step === 5" x-cloak>
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Admin Account</h2>
+            <p class="text-sm text-gray-500 mb-4">The admin will receive an OTP to activate their account.</p>
+            <div class="space-y-4">
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Admin Full Name *</label><input type="text" class="w-full rounded-md border-gray-300 text-sm"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Admin Phone *</label><input type="tel" class="w-full rounded-md border-gray-300 text-sm" placeholder="+91-"></div>
+                <div><label class="block text-sm font-medium text-gray-700 mb-1">Admin Email *</label><input type="email" class="w-full rounded-md border-gray-300 text-sm"></div>
+            </div>
+        </div>
+
+        <!-- Step 6: Review -->
+        <div x-show="step === 6" x-cloak>
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Review &amp; Create</h2>
+            <div class="space-y-3 text-sm">
+                <div class="bg-gray-50 rounded-lg p-4"><strong>Type:</strong> <span x-text="instType || 'Not selected'"></span></div>
+                <div class="bg-gray-50 rounded-lg p-4"><strong>Plan:</strong> <span x-text="plan || 'Not selected'"></span></div>
+                <div class="bg-gray-50 rounded-lg p-4"><strong>Features:</strong> <span x-text="Object.entries(features).filter(([k,v]) => v).map(([k]) => k).join(', ')"></span></div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="mt-6 flex justify-between">
+            <button x-show="step > 1" @click="step--" class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Previous</button>
+            <div x-show="step === 1"></div>
+            <button x-show="step < totalSteps" @click="step++" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Next Step</button>
+            <button x-show="step === totalSteps" class="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500" hx-post="/sa/institutions/create/" hx-target="#main-content">Create Institution</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

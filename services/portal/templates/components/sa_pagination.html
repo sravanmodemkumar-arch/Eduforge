@@ -1,0 +1,72 @@
+{% comment %}
+Super Admin Pagination Component
+Usage: {% include "components/sa_pagination.html" with current_page=1 total_pages=10 total_items=247 per_page=25 url="/sa/institutions/" target="#table-body" %}
+{% endcomment %}
+<nav class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6" aria-label="Pagination">
+    <div class="hidden sm:block">
+        <p class="text-sm text-gray-700">
+            Showing
+            <span class="font-medium">{{ start_item|default:"1" }}</span>
+            to
+            <span class="font-medium">{{ end_item|default:"25" }}</span>
+            of
+            <span class="font-medium">{{ total_items|default:"247" }}</span>
+            results
+        </p>
+    </div>
+    <div class="flex flex-1 justify-between sm:justify-end gap-2">
+        {% if current_page > 1 %}
+        <a hx-get="{{ url }}?page={{ current_page|add:'-1' }}"
+           hx-target="{{ target|default:'#table-body' }}"
+           hx-swap="innerHTML"
+           class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer">
+            <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+            Previous
+        </a>
+        {% else %}
+        <span class="relative inline-flex items-center rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+            <svg class="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+            Previous
+        </span>
+        {% endif %}
+
+        <!-- Page numbers -->
+        <div class="hidden md:flex items-center gap-1">
+            {% for page_num in page_range %}
+            {% if page_num == current_page %}
+            <span class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white">{{ page_num }}</span>
+            {% elif page_num == "..." %}
+            <span class="inline-flex items-center px-2 py-2 text-sm text-gray-500">...</span>
+            {% else %}
+            <a hx-get="{{ url }}?page={{ page_num }}"
+               hx-target="{{ target|default:'#table-body' }}"
+               hx-swap="innerHTML"
+               class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer">{{ page_num }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        {% if current_page < total_pages %}
+        <a hx-get="{{ url }}?page={{ current_page|add:'1' }}"
+           hx-target="{{ target|default:'#table-body' }}"
+           hx-swap="innerHTML"
+           class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 cursor-pointer">
+            Next
+            <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+        </a>
+        {% else %}
+        <span class="relative inline-flex items-center rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+            Next
+            <svg class="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+        </span>
+        {% endif %}
+    </div>
+</nav>
