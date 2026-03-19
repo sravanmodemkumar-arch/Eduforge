@@ -1,0 +1,214 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Database Monitoring - Super Admin{% endblock %}
+{% block page_title %}Database Monitoring{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">PostgreSQL database health, performance metrics, and schema statistics.</p>
+        <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+                hx-get="/sa/infrastructure/database/"
+                hx-target="#db-stats"
+                hx-swap="innerHTML">
+            <svg class="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" /></svg>
+            Refresh
+        </button>
+    </div>
+
+    <div id="db-stats">
+        <!-- DB Overview Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <p class="text-xs text-gray-500">Version</p>
+                <p class="text-lg font-bold text-gray-900 mt-1">PostgreSQL 16.2</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <p class="text-xs text-gray-500">Database Size</p>
+                <p class="text-lg font-bold text-gray-900 mt-1">128.4 GB</p>
+                <p class="text-xs text-gray-500 mt-1">of 500 GB allocated</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <p class="text-xs text-gray-500">Active Connections</p>
+                <p class="text-lg font-bold text-gray-900 mt-1">84 / 200</p>
+                <div class="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+                    <div class="bg-green-500 h-1.5 rounded-full" style="width: 42%"></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <p class="text-xs text-gray-500">Slowest Query (5m)</p>
+                <p class="text-lg font-bold text-amber-600 mt-1">2.4s</p>
+                <p class="text-xs text-gray-500 mt-1">analytics_aggregate</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <p class="text-xs text-gray-500">Cache Hit Ratio</p>
+                <p class="text-lg font-bold text-green-600 mt-1">99.2%</p>
+                <p class="text-xs text-gray-500 mt-1">Target: &gt; 99%</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                <p class="text-xs text-gray-500">Replication Lag</p>
+                <p class="text-lg font-bold text-green-600 mt-1">0.3s</p>
+                <p class="text-xs text-gray-500 mt-1">1 replica, async</p>
+            </div>
+        </div>
+
+        <!-- Additional Metrics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Connection Pool -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                <h3 class="text-sm font-semibold text-gray-900 mb-4">Connection Pool (PgBouncer)</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Active connections</span>
+                        <span class="font-medium text-gray-900">84</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Idle connections</span>
+                        <span class="font-medium text-gray-900">42</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Waiting queries</span>
+                        <span class="font-medium text-green-600">0</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Max pool size</span>
+                        <span class="font-medium text-gray-900">200</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Avg query time</span>
+                        <span class="font-medium text-gray-900">4.2ms</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-500">Queries / sec</span>
+                        <span class="font-medium text-gray-900">1,240</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slow Queries -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
+                <h3 class="text-sm font-semibold text-gray-900 mb-4">Top Slow Queries (Last Hour)</h3>
+                <div class="space-y-3">
+                    <div class="p-3 bg-amber-50 rounded-md">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="font-medium text-amber-800">analytics_aggregate_daily</span>
+                            <span class="font-bold text-amber-700">2.4s avg</span>
+                        </div>
+                        <p class="text-xs text-amber-600 font-mono truncate">SELECT ... FROM exam_results GROUP BY institution_id, date...</p>
+                    </div>
+                    <div class="p-3 bg-gray-50 rounded-md">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="font-medium text-gray-800">student_leaderboard</span>
+                            <span class="font-bold text-gray-700">1.1s avg</span>
+                        </div>
+                        <p class="text-xs text-gray-600 font-mono truncate">SELECT ... FROM exam_attempts JOIN users ... ORDER BY score DESC...</p>
+                    </div>
+                    <div class="p-3 bg-gray-50 rounded-md">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="font-medium text-gray-800">bulk_import_validate</span>
+                            <span class="font-bold text-gray-700">0.8s avg</span>
+                        </div>
+                        <p class="text-xs text-gray-600 font-mono truncate">INSERT INTO staging_questions ... ON CONFLICT DO UPDATE...</p>
+                    </div>
+                    <div class="p-3 bg-gray-50 rounded-md">
+                        <div class="flex justify-between text-xs mb-1">
+                            <span class="font-medium text-gray-800">search_questions_fulltext</span>
+                            <span class="font-bold text-gray-700">0.5s avg</span>
+                        </div>
+                        <p class="text-xs text-gray-600 font-mono truncate">SELECT ... FROM questions WHERE to_tsvector('english', text) @@...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schema Sizes Table -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <h3 class="text-sm font-semibold text-gray-900">Schema / Table Sizes</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Table</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rows</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Size</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Index Size</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bloat</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Vacuum</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-3 whitespace-nowrap text-sm font-mono text-indigo-700">exam_attempts</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">4,82,15,000</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">42.8 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">12.4 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-green-600">2.1%</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-500">2 hours ago</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-3 whitespace-nowrap text-sm font-mono text-indigo-700">questions</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">42,00,000</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">28.5 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">8.2 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-green-600">1.8%</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-500">4 hours ago</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-3 whitespace-nowrap text-sm font-mono text-indigo-700">users</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">5,34,218</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">18.2 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">4.8 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-green-600">1.2%</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-500">1 hour ago</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-3 whitespace-nowrap text-sm font-mono text-indigo-700">exam_results</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">1,85,42,000</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">15.6 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">5.1 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-amber-600">4.5%</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-500">6 hours ago</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-3 whitespace-nowrap text-sm font-mono text-indigo-700">audit_logs</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">24,518</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">8.4 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">2.1 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-green-600">0.8%</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-500">3 hours ago</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-3 whitespace-nowrap text-sm font-mono text-indigo-700">institutions</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">765</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">245 MB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">42 MB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-green-600">0.2%</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-500">1 hour ago</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-3 whitespace-nowrap text-sm font-mono text-indigo-700">notifications</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">8,42,000</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-900">5.8 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-gray-500">1.4 GB</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-sm text-green-600">1.5%</td>
+                            <td class="px-6 py-3 whitespace-nowrap text-xs text-gray-500">2 hours ago</td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="bg-gray-50">
+                        <tr>
+                            <td class="px-6 py-3 text-sm font-semibold text-gray-900">Total</td>
+                            <td class="px-6 py-3 text-sm font-semibold text-gray-900">-</td>
+                            <td class="px-6 py-3 text-sm font-semibold text-gray-900">128.4 GB</td>
+                            <td class="px-6 py-3 text-sm font-semibold text-gray-900">34.0 GB</td>
+                            <td class="px-6 py-3"></td>
+                            <td class="px-6 py-3"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

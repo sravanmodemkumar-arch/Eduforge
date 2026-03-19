@@ -1,0 +1,128 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Map View - Super Admin{% endblock %}
+{% block page_title %}Map View{% endblock %}
+{% block content %}
+<div>
+    <!-- Map Placeholder -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Institution Distribution Across India</h2>
+        </div>
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 h-96 flex items-center justify-center relative">
+            <div class="text-center">
+                <svg class="w-16 h-16 text-indigo-300 mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498l4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 00-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0z"/></svg>
+                <p class="text-sm text-indigo-600 font-medium">Interactive Map</p>
+                <p class="text-xs text-gray-500 mt-1">Integration with Leaflet.js / MapLibre for geographic visualization</p>
+            </div>
+            <!-- Simulated map markers -->
+            <div class="absolute top-16 left-1/3 flex items-center">
+                <span class="w-4 h-4 bg-indigo-500 rounded-full animate-pulse border-2 border-white shadow"></span>
+                <span class="ml-1 text-xs font-medium text-indigo-700 bg-white px-1.5 py-0.5 rounded shadow-sm">Delhi (18)</span>
+            </div>
+            <div class="absolute top-32 left-1/4 flex items-center">
+                <span class="w-3 h-3 bg-indigo-400 rounded-full border-2 border-white shadow"></span>
+                <span class="ml-1 text-xs font-medium text-indigo-700 bg-white px-1.5 py-0.5 rounded shadow-sm">Rajasthan (12)</span>
+            </div>
+            <div class="absolute top-48 right-1/3 flex items-center">
+                <span class="w-5 h-5 bg-indigo-600 rounded-full animate-pulse border-2 border-white shadow"></span>
+                <span class="ml-1 text-xs font-medium text-indigo-700 bg-white px-1.5 py-0.5 rounded shadow-sm">Maharashtra (24)</span>
+            </div>
+            <div class="absolute bottom-24 left-1/3 flex items-center">
+                <span class="w-3 h-3 bg-indigo-400 rounded-full border-2 border-white shadow"></span>
+                <span class="ml-1 text-xs font-medium text-indigo-700 bg-white px-1.5 py-0.5 rounded shadow-sm">Karnataka (15)</span>
+            </div>
+            <div class="absolute bottom-16 right-1/4 flex items-center">
+                <span class="w-3 h-3 bg-indigo-400 rounded-full border-2 border-white shadow"></span>
+                <span class="ml-1 text-xs font-medium text-indigo-700 bg-white px-1.5 py-0.5 rounded shadow-sm">Tamil Nadu (11)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- State-wise Institution Count -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">State-wise Institution Count</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">State</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Institutions</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Students</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue (Monthly)</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Distribution</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Maharashtra</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">24</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">1,84,200</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">&#8377;48.2L</td>
+                        <td class="px-6 py-4"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 100%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Delhi NCR</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">18</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">1,56,800</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">&#8377;42.1L</td>
+                        <td class="px-6 py-4"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 85%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Karnataka</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">15</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">1,12,400</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">&#8377;31.5L</td>
+                        <td class="px-6 py-4"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 65%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Uttar Pradesh</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">14</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">98,600</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">&#8377;24.8L</td>
+                        <td class="px-6 py-4"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 55%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Rajasthan</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">12</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">89,200</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">&#8377;22.3L</td>
+                        <td class="px-6 py-4"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 48%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Tamil Nadu</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">11</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">76,500</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">&#8377;19.8L</td>
+                        <td class="px-6 py-4"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 42%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Telangana</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">10</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">68,900</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">&#8377;17.4L</td>
+                        <td class="px-6 py-4"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" style="width: 38%"></div></div></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Others (21 states)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">38</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">2,14,400</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">&#8377;52.6L</td>
+                        <td class="px-6 py-4"><div class="w-full bg-gray-200 rounded-full h-2"><div class="bg-gray-400 h-2 rounded-full" style="width: 100%"></div></div></td>
+                    </tr>
+                </tbody>
+                <tfoot class="bg-gray-50">
+                    <tr>
+                        <td class="px-6 py-3 text-sm font-bold text-gray-900">Total</td>
+                        <td class="px-6 py-3 text-right text-sm font-bold text-gray-900">142</td>
+                        <td class="px-6 py-3 text-right text-sm font-bold text-gray-900">10,01,000</td>
+                        <td class="px-6 py-3 text-right text-sm font-bold text-gray-900">&#8377;2.59Cr</td>
+                        <td class="px-6 py-3"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

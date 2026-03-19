@@ -1,0 +1,260 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Feature Flags - Super Admin{% endblock %}
+{% block page_title %}Feature Flags{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">Toggle features on/off globally or per rollout percentage.</p>
+        <a href="/sa/config/feature-flags/create/" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+            <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            New Flag
+        </a>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex items-center space-x-3 mb-4">
+        <input type="text" placeholder="Search flags..." class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500 w-64">
+        <select class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+            <option value="">All Statuses</option>
+            <option>Enabled</option>
+            <option>Disabled</option>
+            <option>Partial Rollout</option>
+        </select>
+    </div>
+
+    <!-- Feature Flags Table -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flag Key</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rollout</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+
+                    {% for flag in flags %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">{{ flag.key }}</code>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ flag.name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <button class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 {% if flag.status %}bg-indigo-600{% else %}bg-gray-200{% endif %}"
+                                    hx-post="/sa/config/feature-flags/{{ flag.key }}/toggle/"
+                                    hx-swap="none">
+                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out {% if flag.status %}translate-x-5{% else %}translate-x-0{% endif %}"></span>
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ flag.rollout }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ flag.description }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="/sa/config/feature-flags/{{ flag.key }}/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+
+                    <!-- Hardcoded rows -->
+                    <tr class="hover:bg-gray-50" x-data="{ enabled: true }">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">AI_QUESTION_GEN</code>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">AI Question Generation</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <button @click="enabled = !enabled"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                                    :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'">
+                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                      :class="enabled ? 'translate-x-5' : 'translate-x-0'"></span>
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-20 bg-gray-200 rounded-full h-1.5 mr-2">
+                                    <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <span class="text-sm text-gray-500">100%</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Enable GPT-based MCQ auto-generation for Pro+ plans</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="/sa/config/feature-flags/AI_QUESTION_GEN/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50" x-data="{ enabled: true }">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">WHATSAPP_NOTIF</code>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">WhatsApp Notifications</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <button @click="enabled = !enabled"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                                    :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'">
+                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                      :class="enabled ? 'translate-x-5' : 'translate-x-0'"></span>
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-20 bg-gray-200 rounded-full h-1.5 mr-2">
+                                    <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 75%"></div>
+                                </div>
+                                <span class="text-sm text-gray-500">75%</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Send exam reminders and results via WhatsApp</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="/sa/config/feature-flags/WHATSAPP_NOTIF/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50" x-data="{ enabled: false }">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">VIDEO_PROCTORING</code>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Video Proctoring</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <button @click="enabled = !enabled"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                                    :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'">
+                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                      :class="enabled ? 'translate-x-5' : 'translate-x-0'"></span>
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-20 bg-gray-200 rounded-full h-1.5 mr-2">
+                                    <div class="bg-gray-400 h-1.5 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <span class="text-sm text-gray-500">0%</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">AI-powered video proctoring during live exams</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="/sa/config/feature-flags/VIDEO_PROCTORING/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50" x-data="{ enabled: true }">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">MULTI_LANGUAGE</code>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Multi-Language Support</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <button @click="enabled = !enabled"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                                    :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'">
+                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                      :class="enabled ? 'translate-x-5' : 'translate-x-0'"></span>
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-20 bg-gray-200 rounded-full h-1.5 mr-2">
+                                    <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 50%"></div>
+                                </div>
+                                <span class="text-sm text-gray-500">50%</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Allow questions and UI in Hindi, Tamil, Telugu, Marathi</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="/sa/config/feature-flags/MULTI_LANGUAGE/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50" x-data="{ enabled: true }">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">ADAPTIVE_TESTS</code>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Adaptive Testing Engine</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <button @click="enabled = !enabled"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                                    :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'">
+                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                      :class="enabled ? 'translate-x-5' : 'translate-x-0'"></span>
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-20 bg-gray-200 rounded-full h-1.5 mr-2">
+                                    <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 25%"></div>
+                                </div>
+                                <span class="text-sm text-gray-500">25%</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Dynamically adjust difficulty based on student performance</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="/sa/config/feature-flags/ADAPTIVE_TESTS/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50" x-data="{ enabled: false }">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">DARK_MODE</code>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Dark Mode UI</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <button @click="enabled = !enabled"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                                    :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'">
+                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                      :class="enabled ? 'translate-x-5' : 'translate-x-0'"></span>
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-20 bg-gray-200 rounded-full h-1.5 mr-2">
+                                    <div class="bg-gray-400 h-1.5 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <span class="text-sm text-gray-500">0%</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Enable dark mode theme for student-facing portal</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="/sa/config/feature-flags/DARK_MODE/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                        </td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50" x-data="{ enabled: true }">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <code class="text-sm font-mono text-indigo-700 bg-indigo-50 px-1.5 py-0.5 rounded">BULK_IMPORT_V2</code>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Bulk Import v2</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                            <button @click="enabled = !enabled"
+                                    class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                                    :class="enabled ? 'bg-indigo-600' : 'bg-gray-200'">
+                                <span class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                                      :class="enabled ? 'translate-x-5' : 'translate-x-0'"></span>
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-20 bg-gray-200 rounded-full h-1.5 mr-2">
+                                    <div class="bg-indigo-600 h-1.5 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <span class="text-sm text-gray-500">100%</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">New Excel/CSV bulk import with validation and preview</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right">
+                            <a href="/sa/config/feature-flags/BULK_IMPORT_V2/edit/" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Edit</a>
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

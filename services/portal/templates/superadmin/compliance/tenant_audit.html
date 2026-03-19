@@ -1,0 +1,145 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Tenant Isolation Audit - Super Admin{% endblock %}
+{% block page_title %}Tenant Isolation Audit{% endblock %}
+{% block content %}
+<div>
+    <!-- Summary -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Institutions Audited</p>
+            <p class="text-2xl font-bold text-gray-900">142</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">All Checks Passed</p>
+            <p class="text-2xl font-bold text-green-600">138</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Warnings</p>
+            <p class="text-2xl font-bold text-yellow-600">3</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+            <p class="text-sm text-gray-500">Failures</p>
+            <p class="text-2xl font-bold text-red-600">1</p>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-between mb-4">
+        <p class="text-sm text-gray-500">Last audit run: 19 Mar 2026, 02:00 AM IST</p>
+        <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
+                hx-post="/sa/compliance/tenant-audit/run/"
+                hx-confirm="Run a full tenant isolation audit? This may take 10-15 minutes.">
+            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M5.636 5.636a9 9 0 1012.728 0M12 3v9"/></svg>
+            Run Audit Now
+        </button>
+    </div>
+
+    <!-- Audit Results Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institution</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">DB Isolation</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Storage Isolation</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">API Scoping</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Session Isolation</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Cache Isolation</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Overall</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center text-xs font-bold text-blue-700 mr-3">AC</div>
+                                <span class="text-sm font-medium text-gray-900">Allen Career Institute</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">PASS</span></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-lg bg-purple-100 flex items-center justify-center text-xs font-bold text-purple-700 mr-3">UA</div>
+                                <span class="text-sm font-medium text-gray-900">Unacademy</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">PASS</span></td>
+                    </tr>
+                    <tr class="hover:bg-yellow-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-lg bg-amber-100 flex items-center justify-center text-xs font-bold text-amber-700 mr-3">PW</div>
+                                <span class="text-sm font-medium text-gray-900">Physics Wallah</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-yellow-100 text-yellow-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">WARNING</span></td>
+                    </tr>
+                    <tr class="hover:bg-red-50 bg-red-50/30">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-lg bg-red-100 flex items-center justify-center text-xs font-bold text-red-700 mr-3">TB</div>
+                                <span class="text-sm font-medium text-gray-900">Testbook</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-red-100 text-red-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">FAIL</span></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-lg bg-green-100 flex items-center justify-center text-xs font-bold text-green-700 mr-3">AI</div>
+                                <span class="text-sm font-medium text-gray-900">Aakash Institute</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">PASS</span></td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-lg bg-indigo-100 flex items-center justify-center text-xs font-bold text-indigo-700 mr-3">BJ</div>
+                                <span class="text-sm font-medium text-gray-900">Byju's</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-600"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">PASS</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between">
+            <p class="text-sm text-gray-500">Showing 6 of 142 institutions (filtered to show issues first)</p>
+            <a href="/sa/compliance/tenant-audit/full/" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">View All Results</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

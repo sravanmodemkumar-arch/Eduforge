@@ -1,0 +1,110 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Mobile App Management - Super Admin{% endblock %}
+{% block page_title %}Mobile App Management{% endblock %}
+{% block content %}
+<div x-data="{ forceUpdate: false }">
+    <!-- Live Versions -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24"><path d="M17.523 15.346a.918.918 0 00-.422-.065c-.161 0-.331.033-.506.065a3.006 3.006 0 01-.614.065c-.552 0-.929-.211-1.128-.63-.198-.422-.297-1.109-.297-2.064V8.725h2.446V6.958h-2.446V3.85l-2.263.719v2.389H10.34v1.767h1.953v4.247c0 1.153.26 2.034.778 2.643.519.608 1.283.911 2.293.911.572 0 1.132-.093 1.682-.279l.117-.043-.162-1.31-.063.01-.125.02z"/><path d="M6.383 17.18c1.975 0 3.238-.79 3.238-2.256 0-1.095-.767-1.794-2.18-2.133l-1.07-.26c-.757-.182-1.09-.484-1.09-.954 0-.576.519-.97 1.31-.97.826 0 1.44.385 1.792 1.12l1.667-.867c-.53-1.076-1.658-1.754-3.268-1.754-1.872 0-3.207.882-3.207 2.2 0 1.07.71 1.811 2.057 2.141l1.089.269c.847.208 1.153.493 1.153.973 0 .607-.555.99-1.473.99-.982 0-1.732-.477-2.158-1.327l-1.73.868C3.07 16.441 4.4 17.18 6.383 17.18z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Android</h3>
+                        <p class="text-sm text-gray-500">Google Play Store</p>
+                    </div>
+                </div>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-800">v2.4.1</span>
+            </div>
+            <div class="space-y-2 text-sm text-gray-600">
+                <div class="flex justify-between"><span>Min Version Required</span><span class="font-medium text-gray-900">v2.2.0</span></div>
+                <div class="flex justify-between"><span>Active Installs</span><span class="font-medium text-gray-900">6,84,000</span></div>
+                <div class="flex justify-between"><span>Rating</span><span class="font-medium text-gray-900">4.6 / 5.0</span></div>
+                <div class="flex justify-between"><span>Last Updated</span><span class="font-medium text-gray-900">15 Mar 2026</span></div>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mr-4">
+                        <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">iOS</h3>
+                        <p class="text-sm text-gray-500">Apple App Store</p>
+                    </div>
+                </div>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-green-100 text-green-800">v2.4.0</span>
+            </div>
+            <div class="space-y-2 text-sm text-gray-600">
+                <div class="flex justify-between"><span>Min Version Required</span><span class="font-medium text-gray-900">v2.2.0</span></div>
+                <div class="flex justify-between"><span>Active Installs</span><span class="font-medium text-gray-900">3,16,000</span></div>
+                <div class="flex justify-between"><span>Rating</span><span class="font-medium text-gray-900">4.7 / 5.0</span></div>
+                <div class="flex justify-between"><span>Last Updated</span><span class="font-medium text-gray-900">14 Mar 2026</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Force Update Toggle -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h3 class="text-base font-semibold text-gray-900">Force Update</h3>
+                <p class="text-sm text-gray-500 mt-1">When enabled, users on older versions will be forced to update before accessing the app.</p>
+            </div>
+            <button @click="forceUpdate = !forceUpdate" :class="forceUpdate ? 'bg-indigo-600' : 'bg-gray-200'" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out">
+                <span :class="forceUpdate ? 'translate-x-5' : 'translate-x-0'" class="pointer-events-none inline-block h-5 w-5 translate-y-0.5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Crash Reports -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Recent Crash Reports</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Error</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Platform</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Version</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Count</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Users Affected</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Seen</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 text-sm font-mono text-red-600 max-w-xs truncate">NullPointerException in TestSubmitActivity</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Android</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">v2.4.1</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">342</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">189</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2h ago</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 text-sm font-mono text-red-600 max-w-xs truncate">EXC_BAD_ACCESS in VideoPlayerController</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">iOS</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">v2.4.0</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">128</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">94</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">4h ago</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 text-sm font-mono text-red-600 max-w-xs truncate">OutOfMemoryError during PDF render</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Android</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">v2.3.8</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-semibold text-gray-900">87</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm text-gray-700">56</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">6h ago</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,226 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Audit Log - Super Admin{% endblock %}
+{% block page_title %}Audit Log{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">Complete audit trail of all platform actions and events.</p>
+        <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+            <svg class="h-4 w-4 mr-1.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+            Export Logs
+        </button>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+            <input type="text" placeholder="Search user..." class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                   hx-get="/sa/security/audit-log/filter/"
+                   hx-trigger="keyup changed delay:300ms"
+                   hx-target="#audit-table"
+                   name="user">
+            <select name="action" class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">All Actions</option>
+                <option>Login</option>
+                <option>Logout</option>
+                <option>Create</option>
+                <option>Update</option>
+                <option>Delete</option>
+                <option>Export</option>
+                <option>Impersonate</option>
+            </select>
+            <select name="resource" class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                <option value="">All Resource Types</option>
+                <option>Institution</option>
+                <option>User</option>
+                <option>Subscription</option>
+                <option>Config</option>
+                <option>Domain</option>
+                <option>Exam</option>
+            </select>
+            <input type="date" class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="From date">
+            <input type="date" class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="To date">
+        </div>
+    </div>
+
+    <!-- Audit Log Table -->
+    <div id="audit-table" class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resource</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">IP Address</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+
+                    {% for log in logs %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">{{ log.timestamp }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ log.user }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ log.action_class }}">{{ log.action }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ log.resource }}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{{ log.details }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">{{ log.ip }}</td>
+                    </tr>
+                    {% empty %}
+
+                    <!-- Hardcoded rows -->
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 11:42:15</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-amber-500 flex items-center justify-center text-xs font-bold text-white">SA</div>
+                                <span class="ml-2 text-sm text-gray-900">Super Admin</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Update</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Config</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Changed MAX_CONCURRENT_SESSIONS from 2 to 3</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">103.21.45.128</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 11:30:02</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-amber-500 flex items-center justify-center text-xs font-bold text-white">SA</div>
+                                <span class="ml-2 text-sm text-gray-900">Super Admin</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Login</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Session</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Successful login via OTP</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">103.21.45.128</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 10:15:44</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold text-white">RK</div>
+                                <span class="ml-2 text-sm text-gray-900">Rajesh Kumar</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-purple-50 px-2.5 py-0.5 text-xs font-medium text-purple-700">Impersonate</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">User</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Impersonated user admin@vidyaedutech.com (INST-001)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">182.76.12.55</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 09:48:22</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-purple-500 flex items-center justify-center text-xs font-bold text-white">PS</div>
+                                <span class="ml-2 text-sm text-gray-900">Priya Sharma</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">Create</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Institution</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Created new institution: Rajputana Classes (INST-766)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">49.36.192.44</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 09:12:08</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-blue-500 flex items-center justify-center text-xs font-bold text-white">RK</div>
+                                <span class="ml-2 text-sm text-gray-900">Rajesh Kumar</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700">Export</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">User</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Exported 5,342 user records as CSV</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">182.76.12.55</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-19 08:55:30</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-amber-500 flex items-center justify-center text-xs font-bold text-white">SA</div>
+                                <span class="ml-2 text-sm text-gray-900">Super Admin</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">Delete</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Domain</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Removed custom domain test.example.com for INST-455</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">103.21.45.128</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-18 22:10:15</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-gray-500 flex items-center justify-center text-xs font-bold text-white">SY</div>
+                                <span class="ml-2 text-sm text-gray-900">System</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">Update</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Subscription</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">Auto-renewed subscription for INST-310 (Pro, monthly)</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">-</td>
+                    </tr>
+
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">2026-03-18 18:30:00</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="h-6 w-6 rounded-full bg-red-500 flex items-center justify-center text-xs font-bold text-white">!</div>
+                                <span class="ml-2 text-sm text-red-600 font-medium">Unknown</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">Login Failed</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Session</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">5 failed login attempts for admin@eduforge.io</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">14.142.78.200</td>
+                    </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex items-center justify-between px-6 py-3 border-t border-gray-200 bg-gray-50">
+            <p class="text-sm text-gray-500">Showing <span class="font-medium">1</span> to <span class="font-medium">8</span> of <span class="font-medium">24,518</span> log entries</p>
+            <div class="flex items-center space-x-2">
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-500 hover:bg-gray-50" disabled>Previous</button>
+                <button class="rounded-md border border-indigo-500 bg-indigo-50 px-3 py-1.5 text-sm font-medium text-indigo-600">1</button>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">2</button>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">3</button>
+                <span class="text-gray-400">...</span>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">3,065</button>
+                <button class="rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

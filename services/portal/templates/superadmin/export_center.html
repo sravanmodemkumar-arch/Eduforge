@@ -1,0 +1,145 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Export Center - Super Admin{% endblock %}
+{% block page_title %}Export Center{% endblock %}
+{% block content %}
+<div x-data="{ showNewExport: false }">
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">Download and manage data exports from the platform.</p>
+        <button @click="showNewExport = true" class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            New Export
+        </button>
+    </div>
+
+    <!-- My Exports Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">My Exports</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Export Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Size</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">All Institutions Report</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">CSV</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Completed</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">2.4 MB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">19 Mar 2026, 08:30 AM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                            <a href="#" class="inline-flex items-center px-3 py-1 text-xs font-medium text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100">
+                                <svg class="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Revenue March 2026</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">XLSX</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Completed</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">1.8 MB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">18 Mar 2026, 10:00 AM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                            <a href="#" class="inline-flex items-center px-3 py-1 text-xs font-medium text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100">
+                                <svg class="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">User Analytics Export</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">CSV</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Processing</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">--</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">19 Mar 2026, 11:15 AM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                            <span class="text-xs text-gray-400">Processing (34%)</span>
+                        </td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Content Audit Log</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">PDF</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Completed</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">5.6 MB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">17 Mar 2026, 09:00 AM</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
+                            <a href="#" class="inline-flex items-center px-3 py-1 text-xs font-medium text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100">
+                                <svg class="w-3.5 h-3.5 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- New Export Modal -->
+    <div x-show="showNewExport" x-cloak class="fixed inset-0 z-50 flex items-center justify-center" x-transition>
+        <div class="fixed inset-0 bg-gray-900/50" @click="showNewExport = false"></div>
+        <div class="relative bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Create New Export</h3>
+            <form hx-post="/sa/export-center/create/" hx-swap="none">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Export Name</label>
+                        <input type="text" name="name" class="w-full text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="e.g., Monthly Revenue Report">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Data Type</label>
+                        <select name="data_type" class="w-full text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                            <option>Institutions</option>
+                            <option>Users</option>
+                            <option>Revenue</option>
+                            <option>Content</option>
+                            <option>Audit Logs</option>
+                            <option>Analytics</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Format</label>
+                        <select name="format" class="w-full text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                            <option>CSV</option>
+                            <option>XLSX</option>
+                            <option>PDF</option>
+                            <option>JSON</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+                            <input type="date" name="from_date" class="w-full text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+                            <input type="date" name="to_date" class="w-full text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Institution (optional)</label>
+                        <select name="institution" class="w-full text-sm border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">All Institutions</option>
+                            <option>Allen Career Institute</option>
+                            <option>Unacademy</option>
+                            <option>Physics Wallah</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" @click="showNewExport = false" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">Cancel</button>
+                    <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">Start Export</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
