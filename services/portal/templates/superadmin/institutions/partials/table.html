@@ -1,0 +1,96 @@
+<!-- Institution table partial (HTMX swappable) -->
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-4 py-3 w-10"><input type="checkbox" @change="selectAll = $event.target.checked; selectedRows = selectAll ? [{% for i in institutions %}'{{ i.id }}'{% if not forloop.last %},{% endif %}{% endfor %}] : []" class="rounded border-gray-300 text-indigo-600"></th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Institution</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Group</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Students</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Plan</th>
+                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase">Health</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 bg-white">
+                {% for inst in institutions %}
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-4 py-3"><input type="checkbox" value="{{ inst.id }}" @change="$event.target.checked ? selectedRows.push('{{ inst.id }}') : selectedRows = selectedRows.filter(r => r !== '{{ inst.id }}')" class="rounded border-gray-300 text-indigo-600"></td>
+                    <td class="px-4 py-3">
+                        <a href="/sa/institutions/{{ inst.id }}/" class="text-sm font-medium text-gray-900 hover:text-indigo-600">{{ inst.name }}</a>
+                        <p class="text-xs text-gray-500">{{ inst.code }}</p>
+                    </td>
+                    <td class="px-4 py-3">
+                        {% if inst.institution_type == "SCHOOL" %}
+                        <span class="inline-flex items-center rounded-full bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-inset ring-purple-600/20">School</span>
+                        {% elif inst.institution_type == "COLLEGE" %}
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">College</span>
+                        {% elif inst.institution_type == "COACHING" %}
+                        <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 ring-1 ring-inset ring-amber-600/20">Coaching</span>
+                        {% elif inst.institution_type == "MOCK_TEST_DOMAIN" %}
+                        <span class="inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-600/20">Mock Test</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-500">{{ inst.group_name|default:"—" }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500">{% if inst.city %}{{ inst.city }}, {{ inst.state }}{% else %}—{% endif %}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900 text-right font-medium">{{ inst.students|floatformat:0 }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500">{{ inst.plan }}</td>
+                    <td class="px-4 py-3 text-center">
+                        {% if inst.health_status == "healthy" %}
+                        <span class="inline-flex items-center rounded-full bg-green-50 px-2.5 py-0.5 text-xs font-medium text-green-700">{{ inst.health_score }}</span>
+                        {% elif inst.health_status == "at_risk" %}
+                        <span class="inline-flex items-center rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700">{{ inst.health_score }}</span>
+                        {% else %}
+                        <span class="inline-flex items-center rounded-full bg-red-50 px-2.5 py-0.5 text-xs font-medium text-red-700">{{ inst.health_score }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3">
+                        {% if inst.status == "ACTIVE" %}
+                        <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Active</span>
+                        {% elif inst.status == "TRIAL" %}
+                        <span class="inline-flex items-center rounded-full bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">Trial</span>
+                        {% elif inst.status == "SUSPENDED" %}
+                        <span class="inline-flex items-center rounded-full bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">Suspended</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3 text-right">
+                        <div x-data="{ open: false }" class="relative inline-block">
+                            <button @click="open = !open" class="text-gray-400 hover:text-gray-600">
+                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" /></svg>
+                            </button>
+                            <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 z-10 mt-1 w-40 rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5" x-cloak>
+                                <a href="/sa/institutions/{{ inst.id }}/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Details</a>
+                                <a href="/sa/institutions/{{ inst.id }}/?tab=users" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Users</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Impersonate</a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">Suspend</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="10">
+                        {% include "components/sa_empty_state.html" with icon="institution" title="No institutions found" message="Try adjusting your filters or search query." action_label="Clear Filters" action_url="/sa/institutions/" %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Pagination -->
+    <div class="border-t border-gray-200 bg-gray-50 px-4 py-3 flex items-center justify-between">
+        <p class="text-sm text-gray-500">Showing <span class="font-medium">{{ total }}</span> institutions</p>
+        <div class="flex items-center space-x-1">
+            <span class="inline-flex items-center rounded-md bg-indigo-50 px-3 py-1.5 text-xs font-medium text-indigo-700">1</span>
+            <a href="?page=2" class="inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100">2</a>
+            <a href="?page=3" class="inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100">3</a>
+            <span class="text-gray-400">...</span>
+            <a href="?page=39" class="inline-flex items-center rounded-md px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100">39</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}{{ user.full_name }} - Super Admin{% endblock %}
+{% block page_title %}{{ user.full_name }}{% endblock %}
+
+{% block content %}
+<div x-data="{ activeTab: 'stats', showBlockModal: false }">
+    <!-- Profile Header -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-5 mb-6">
+        <div class="flex items-start justify-between">
+            <div class="flex items-center gap-4">
+                <div class="h-14 w-14 rounded-full bg-indigo-500 flex items-center justify-center text-lg font-bold text-white">{{ user.full_name|first }}</div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900">{{ user.full_name }}</h1>
+                    <p class="text-sm text-gray-500">{{ user.phone }} &middot; {{ user.email }}</p>
+                    <div class="mt-1 flex items-center gap-2">
+                        {% for r in user.roles %}
+                        <span class="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-600/20">{{ r }}</span>
+                        {% endfor %}
+                        <span class="text-xs text-gray-400">&middot; {{ user.institution }}</span>
+                        {% if user.department %}<span class="text-xs text-gray-400">&middot; {{ user.department }}</span>{% endif %}
+                        <span class="text-xs text-gray-400">&middot; Last active: {{ user.last_active }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Impersonate</button>
+                <button @click="showBlockModal = true" class="inline-flex items-center rounded-md bg-red-50 px-3 py-2 text-sm font-medium text-red-700 ring-1 ring-inset ring-red-200 hover:bg-red-100">Block</button>
+                <button class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Transfer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="border-b border-gray-200 mb-6">
+        <nav class="flex space-x-6 -mb-px">
+            {% for t in "stats,exams,content,activity"|split:"," %}
+            <button @click="activeTab = '{{ t }}'" :class="activeTab === '{{ t }}' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700'" class="whitespace-nowrap border-b-2 py-3 px-1 text-sm font-medium capitalize">{{ t }}</button>
+            {% endfor %}
+        </nav>
+    </div>
+
+    <!-- Stats Tab -->
+    <div x-show="activeTab === 'stats'">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4"><p class="text-xs text-gray-500 uppercase">Tests Taken</p><p class="mt-1 text-xl font-bold text-gray-900">{{ user.tests_taken|default:"—" }}</p></div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4"><p class="text-xs text-gray-500 uppercase">Avg Score</p><p class="mt-1 text-xl font-bold text-gray-900">{{ user.avg_score|default:"—" }}{% if user.avg_score %}%{% endif %}</p></div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4"><p class="text-xs text-gray-500 uppercase">Rank</p><p class="mt-1 text-xl font-bold text-gray-900">{{ user.rank|default:"—" }}</p></div>
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4"><p class="text-xs text-gray-500 uppercase">Login Count</p><p class="mt-1 text-xl font-bold text-gray-900">847</p></div>
+        </div>
+    </div>
+
+    {% for t in "exams,content,activity"|split:"," %}
+    <div x-show="activeTab === '{{ t }}'" x-cloak>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center text-gray-400">
+            <p class="text-sm capitalize">{{ t }} data loads via HTMX</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Block Modal -->
+    <div x-show="showBlockModal" x-transition class="fixed inset-0 z-50 flex items-center justify-center" x-cloak>
+        <div class="fixed inset-0 bg-gray-900/50" @click="showBlockModal = false"></div>
+        <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full mx-4 p-6">
+            <h3 class="text-lg font-semibold text-red-600">Block User</h3>
+            <p class="mt-2 text-sm text-gray-500">This will prevent <strong>{{ user.full_name }}</strong> from logging in.</p>
+            <div class="mt-4"><label class="block text-sm font-medium text-gray-700 mb-1">Reason</label><textarea rows="3" class="w-full rounded-md border-gray-300 text-sm"></textarea></div>
+            <div class="mt-5 flex justify-end gap-3">
+                <button @click="showBlockModal = false" class="rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-700 ring-1 ring-inset ring-gray-300">Cancel</button>
+                <button class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-500">Block User</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

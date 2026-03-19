@@ -1,0 +1,236 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Mock Test Sites - Super Admin{% endblock %}
+{% block page_title %}Mock Test Sites{% endblock %}
+
+{% block content %}
+<div>
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <p class="text-sm text-gray-500">Manage dedicated mock test domains and their configurations.</p>
+        <a href="/sa/domains/mock-sites/create/" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+            <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            Add Mock Site
+        </a>
+    </div>
+
+    <!-- Mock Site Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
+        <!-- Card 1: sscexamprep.com -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-5">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900">sscexamprep.com</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">SSC &amp; Government Exams</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span>
+                        Active
+                    </span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Students</p>
+                        <p class="text-lg font-bold text-gray-900">1,24,500</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Tests</p>
+                        <p class="text-lg font-bold text-gray-900">8,420</p>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
+                    <div class="flex items-center">
+                        <svg class="h-3.5 w-3.5 text-green-500 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                        SSL Valid (expires 2026-09-15)
+                    </div>
+                    <span class="text-gray-400">Created: 2024-06-10</span>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-5 py-3 bg-gray-50 flex items-center justify-between">
+                <a href="/sa/domains/mock-sites/sscexamprep/" class="text-xs font-medium text-indigo-600 hover:text-indigo-800">View Details</a>
+                <div class="flex items-center space-x-3">
+                    <a href="/sa/domains/mock-sites/sscexamprep/edit/" class="text-xs text-gray-500 hover:text-gray-700">Edit</a>
+                    <a href="https://sscexamprep.com" target="_blank" class="text-xs text-gray-500 hover:text-gray-700 inline-flex items-center">
+                        Visit
+                        <svg class="h-3 w-3 ml-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: rrbmocktest.in -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-5">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900">rrbmocktest.in</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">Railway Recruitment Board</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span>
+                        Active
+                    </span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Students</p>
+                        <p class="text-lg font-bold text-gray-900">89,200</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Tests</p>
+                        <p class="text-lg font-bold text-gray-900">5,640</p>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
+                    <div class="flex items-center">
+                        <svg class="h-3.5 w-3.5 text-green-500 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                        SSL Valid (expires 2026-11-20)
+                    </div>
+                    <span class="text-gray-400">Created: 2024-08-22</span>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-5 py-3 bg-gray-50 flex items-center justify-between">
+                <a href="/sa/domains/mock-sites/rrbmocktest/" class="text-xs font-medium text-indigo-600 hover:text-indigo-800">View Details</a>
+                <div class="flex items-center space-x-3">
+                    <a href="/sa/domains/mock-sites/rrbmocktest/edit/" class="text-xs text-gray-500 hover:text-gray-700">Edit</a>
+                    <a href="https://rrbmocktest.in" target="_blank" class="text-xs text-gray-500 hover:text-gray-700 inline-flex items-center">
+                        Visit
+                        <svg class="h-3 w-3 ml-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: bankexamhub.com -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-5">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900">bankexamhub.com</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">Banking &amp; Insurance Exams</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span>
+                        Active
+                    </span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Students</p>
+                        <p class="text-lg font-bold text-gray-900">2,15,800</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Tests</p>
+                        <p class="text-lg font-bold text-gray-900">12,350</p>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
+                    <div class="flex items-center">
+                        <svg class="h-3.5 w-3.5 text-green-500 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                        SSL Valid (expires 2026-08-03)
+                    </div>
+                    <span class="text-gray-400">Created: 2024-03-15</span>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-5 py-3 bg-gray-50 flex items-center justify-between">
+                <a href="/sa/domains/mock-sites/bankexamhub/" class="text-xs font-medium text-indigo-600 hover:text-indigo-800">View Details</a>
+                <div class="flex items-center space-x-3">
+                    <a href="/sa/domains/mock-sites/bankexamhub/edit/" class="text-xs text-gray-500 hover:text-gray-700">Edit</a>
+                    <a href="https://bankexamhub.com" target="_blank" class="text-xs text-gray-500 hover:text-gray-700 inline-flex items-center">
+                        Visit
+                        <svg class="h-3 w-3 ml-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: defenceprep.in -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-5">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900">defenceprep.in</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">Defence &amp; NDA Exams</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span>
+                        Maintenance
+                    </span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Students</p>
+                        <p class="text-lg font-bold text-gray-900">56,300</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Tests</p>
+                        <p class="text-lg font-bold text-gray-900">3,870</p>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
+                    <div class="flex items-center">
+                        <svg class="h-3.5 w-3.5 text-amber-500 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+                        SSL Expiring Soon (2026-04-02)
+                    </div>
+                    <span class="text-gray-400">Created: 2025-01-08</span>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-5 py-3 bg-gray-50 flex items-center justify-between">
+                <a href="/sa/domains/mock-sites/defenceprep/" class="text-xs font-medium text-indigo-600 hover:text-indigo-800">View Details</a>
+                <div class="flex items-center space-x-3">
+                    <a href="/sa/domains/mock-sites/defenceprep/edit/" class="text-xs text-gray-500 hover:text-gray-700">Edit</a>
+                    <a href="https://defenceprep.in" target="_blank" class="text-xs text-gray-500 hover:text-gray-700 inline-flex items-center">
+                        Visit
+                        <svg class="h-3 w-3 ml-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: stateexams.co.in -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div class="p-5">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900">stateexams.co.in</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">State PSC &amp; TET Exams</p>
+                    </div>
+                    <span class="inline-flex items-center rounded-full bg-red-50 px-2 py-1 text-xs font-medium text-red-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span>
+                        DNS Pending
+                    </span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Students</p>
+                        <p class="text-lg font-bold text-gray-900">12,450</p>
+                    </div>
+                    <div class="bg-gray-50 rounded-md p-2.5">
+                        <p class="text-xs text-gray-500">Tests</p>
+                        <p class="text-lg font-bold text-gray-900">1,230</p>
+                    </div>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
+                    <div class="flex items-center">
+                        <svg class="h-3.5 w-3.5 text-red-500 mr-1" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+                        SSL Not Provisioned
+                    </div>
+                    <span class="text-gray-400">Created: 2026-02-28</span>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 px-5 py-3 bg-gray-50 flex items-center justify-between">
+                <a href="/sa/domains/mock-sites/stateexams/" class="text-xs font-medium text-indigo-600 hover:text-indigo-800">View Details</a>
+                <div class="flex items-center space-x-3">
+                    <a href="/sa/domains/mock-sites/stateexams/edit/" class="text-xs text-gray-500 hover:text-gray-700">Edit</a>
+                    <a href="https://stateexams.co.in" target="_blank" class="text-xs text-gray-500 hover:text-gray-700 inline-flex items-center">
+                        Visit
+                        <svg class="h-3 w-3 ml-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

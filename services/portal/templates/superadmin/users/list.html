@@ -1,0 +1,47 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}User Management - Super Admin{% endblock %}
+{% block page_title %}User Management{% endblock %}
+
+{% block content %}
+<div x-data="{ selectedRows: [] }">
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-4">
+        <div class="flex flex-wrap items-center gap-3 p-4">
+            <select name="level" hx-get="/sa/users/" hx-target="#user-table" hx-include="[name]" class="rounded-md border-gray-300 text-sm py-1.5">
+                <option value="">All Levels</option>
+                <option value="platform">Platform Staff</option>
+                <option value="institution">Institution Users</option>
+                <option value="student">Students</option>
+                <option value="parent">Parents</option>
+            </select>
+            <select name="role" hx-get="/sa/users/" hx-target="#user-table" hx-include="[name]" class="rounded-md border-gray-300 text-sm py-1.5">
+                <option value="">All Roles</option>
+                <option value="SUPER_ADMIN">Super Admin</option>
+                <option value="PLATFORM_ADMIN">Platform Admin</option>
+                <option value="INSTITUTION_ADMIN">Institution Admin</option>
+                <option value="TEACHER">Teacher</option>
+                <option value="STUDENT">Student</option>
+                <option value="PARENT">Parent</option>
+            </select>
+            <select name="status" hx-get="/sa/users/" hx-target="#user-table" hx-include="[name]" class="rounded-md border-gray-300 text-sm py-1.5">
+                <option value="">All Status</option>
+                <option value="ACTIVE">Active</option>
+                <option value="BLOCKED">Blocked</option>
+                <option value="INACTIVE">Inactive</option>
+            </select>
+            <input type="text" name="search" value="{{ search }}" placeholder="Name, email, phone..."
+                   hx-get="/sa/users/" hx-target="#user-table" hx-include="[name]"
+                   hx-trigger="keyup changed delay:300ms"
+                   class="rounded-md border-gray-300 text-sm py-1.5 px-3 w-64">
+            <div class="ml-auto flex gap-2">
+                <a href="/sa/users/platform-staff/" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Platform Staff</a>
+                <a href="/sa/users/impersonation-log/" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-medium text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Impersonation Log</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="user-table">
+        {% include "superadmin/users/partials/table.html" %}
+    </div>
+</div>
+{% endblock %}

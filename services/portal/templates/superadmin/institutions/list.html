@@ -1,0 +1,60 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Institutions - Super Admin{% endblock %}
+{% block page_title %}Institution Management{% endblock %}
+
+{% block content %}
+<div x-data="{ selectedRows: [], selectAll: false }">
+
+    <!-- Saved View Tabs -->
+    <div class="flex items-center space-x-1 mb-4 overflow-x-auto pb-1">
+        {% with views="all:All:765,schools:Schools:500,colleges:Colleges:200,coaching:Coaching:10,mock_sites:Mock Sites:5,at_risk:At Risk:33,critical:Critical:7" %}
+        {% for v in views|split:"," %}
+        {% with parts=v|split:":" %}
+        <a href="?view={{ parts.0 }}"
+           class="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors {% if view == parts.0 or view == '' and parts.0 == 'all' %}bg-indigo-100 text-indigo-700{% else %}bg-gray-100 text-gray-600 hover:bg-gray-200{% endif %}">
+            {{ parts.1 }} <span class="ml-1 text-[10px] {% if view == parts.0 or view == '' and parts.0 == 'all' %}text-indigo-500{% else %}text-gray-400{% endif %}">({{ parts.2 }})</span>
+        </a>
+        {% endwith %}
+        {% endfor %}
+        {% endwith %}
+    </div>
+
+    <!-- Filter Bar + Actions -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-4">
+        <div class="flex flex-wrap items-center gap-3 p-4">
+            <select name="type" hx-get="/sa/institutions/" hx-target="#inst-table" hx-include="[name]" class="rounded-md border-gray-300 text-sm py-1.5 pr-8">
+                <option value="">All Types</option>
+                <option value="SCHOOL">School</option>
+                <option value="COLLEGE">College</option>
+                <option value="COACHING">Coaching</option>
+                <option value="MOCK_TEST_DOMAIN">Mock Test</option>
+            </select>
+            <select name="status" hx-get="/sa/institutions/" hx-target="#inst-table" hx-include="[name]" class="rounded-md border-gray-300 text-sm py-1.5 pr-8">
+                <option value="">All Status</option>
+                <option value="ACTIVE">Active</option>
+                <option value="TRIAL">Trial</option>
+                <option value="SUSPENDED">Suspended</option>
+                <option value="EXPIRED">Expired</option>
+            </select>
+            <input type="text" name="search" value="{{ search }}" placeholder="Search name, code..."
+                   hx-get="/sa/institutions/" hx-target="#inst-table" hx-include="[name]"
+                   hx-trigger="keyup changed delay:300ms"
+                   class="rounded-md border-gray-300 text-sm py-1.5 px-3 w-64">
+            <div class="ml-auto">
+                <a href="/sa/institutions/create/" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                    <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                    Add Institution
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div id="inst-table">
+        {% include "superadmin/institutions/partials/table.html" %}
+    </div>
+
+    <!-- Bulk Action Toolbar -->
+    {% include "components/sa_bulk_toolbar.html" with show_suspend=True show_delete=True %}
+</div>
+{% endblock %}

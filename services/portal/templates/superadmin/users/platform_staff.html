@@ -1,0 +1,38 @@
+{% extends "layouts/sa_base.html" %}
+{% block title %}Platform Staff - Super Admin{% endblock %}
+{% block page_title %}Platform Staff{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+        <p class="text-sm text-gray-500">{{ total }} platform staff members</p>
+        <button class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white hover:bg-indigo-500">+ Add Staff</button>
+    </div>
+    <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role(s)</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Last Active</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+            {% for u in users %}
+            <tr class="hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm font-medium text-gray-900">{{ u.full_name }}</td>
+                <td class="px-4 py-3 text-sm text-gray-500">{{ u.email }}</td>
+                <td class="px-4 py-3 text-sm text-gray-500">{{ u.department }}</td>
+                <td class="px-4 py-3">{% for r in u.roles %}<span class="inline-flex items-center rounded-full bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700 mr-0.5">{{ r }}</span>{% endfor %}</td>
+                <td class="px-4 py-3 text-sm text-gray-500">{{ u.last_active }}</td>
+                <td class="px-4 py-3"><span class="inline-flex items-center rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700">{{ u.status }}</span></td>
+                <td class="px-4 py-3 text-right"><a href="/sa/users/{{ u.id }}/" class="text-sm text-indigo-600 hover:text-indigo-800">Edit</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
